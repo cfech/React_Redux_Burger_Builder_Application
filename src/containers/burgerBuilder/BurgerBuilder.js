@@ -9,9 +9,13 @@ import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler"
 
 import axios from "../../axios_orders"
 
-import { connect } from "react-redux"
-import * as actionType from "../../store/action"
 
+
+//------------Redux imports---------------------------------------------------------------------------
+import { connect } from "react-redux"
+import * as actionCreators from "../../store/actions/index"
+
+//------------Redux imports---------------------------------------------------------------------------
 
 
 
@@ -20,21 +24,22 @@ class BurgerBuilder extends Component {
     //we only have the Ui state here now
     state = {
         purchasing: false,
-        loading: false,
-        error: false
     }
 
 
     //for retrieving info from firebase
+
+    //example if you wan to just call a dispatch prop in the .then
     componentDidMount() {
         // axios.get("https://react-burger-builder-5a549.firebaseio.com/ingredients.json")
         //     .then(response => {
-        //         this.setState({
-        //             ingredients: response.data
-        //         })
+        //         console.log(response)
+        //         this.props.onIngredientRetrieved(response.data)
         //     }).catch(err => {
         //         this.setState({ error: true })
         //     })
+
+        this.props.onIngredientRetrieved()
     }
 
 
@@ -88,7 +93,7 @@ class BurgerBuilder extends Component {
 
         let orderSummary = null
 
-        let burger = this.state.error ? <p>ingredients cant be loaded</p> : <Spinner></Spinner>
+        let burger = this.props.error ? <p>ingredients cant be loaded</p> : <Spinner></Spinner>
 
 
         if (this.props.ing) {
@@ -111,12 +116,6 @@ class BurgerBuilder extends Component {
                 price={this.props.price} />
         }
 
-        if (this.state.loading) {
-
-            orderSummary = <Spinner />
-        }
-
-
         return (
             <Aux>
 
@@ -133,18 +132,30 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
     return ({
         ing: state.ingredients,
-        price: state.totalPrice
+        price: state.totalPrice, 
+        error : state.error
     })
 }
 const mapDispatchToProps = dispatch => {
     return ({
         //ing name is being passed from buildcontrols
         onIngredientAdded: (ingName) => {
-            return dispatch({ type: actionType.ADD_INGREDIENT, ingredientName: ingName })
+            return dispatch(actionCreators.addIngredient(ingName))
         },
         onIngredientRemoved: (ingName) => {
-            return dispatch({ type: actionType.REMOVE_INGREDIENT, ingredientName: ingName })
+            return dispatch(actionCreators.removeIngredient(ingName))
+        }, 
+
+        //if want to use this function in .then of axios
+        // onIngredientRetrieved: (ingredients) => {
+        //     return dispatch({type: "SET_INGREDIENTS", ing: ingredients})
+        // }
+
+        onIngredientRetrieved: () =>{
+            return dispatch(actionCreators.initIngredients())
         }
+
+
     })
 }
 

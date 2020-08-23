@@ -1,15 +1,11 @@
-import * as actionTypes from "../action"
+import * as actionTypes from "../actions/actionTypes"
+//reducer for burger builder
+
 
 const initialState = {
-    ingredients: {
-        lettuce: 0,
-        bacon: 0,
-        cheese: 0,
-        ketchup: 0,
-        meat: 0
-
-    },
-    totalPrice: 4
+    ingredients: null,
+    totalPrice: 4,
+    error: false
 }
 
 const INGREDIENTPRICES = {
@@ -26,26 +22,49 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_INGREDIENT:
             return {
-                ...state, 
+                ...state,
                 ingredients: {
-                    ...state.ingredients, 
+                    ...state.ingredients,
                     //will be the ingredient over ridden: the new value of that ingredient
                     //cheese : 0 + 1
                     [action.ingredientName]: state.ingredients[action.ingredientName] + 1
-                }, 
+                },
                 totalPrice: state.totalPrice + INGREDIENTPRICES[action.ingredientName]
             }
         case actionTypes.REMOVE_INGREDIENT:
             return {
-                ...state, 
+                ...state,
                 ingredients: {
-                    ...state.ingredients, 
+                    ...state.ingredients,
                     //will be the ingredient over ridden: the new value of that ingredient
                     //cheese : 0 + 1
                     [action.ingredientName]: state.ingredients[action.ingredientName] - 1
                 },
                 totalPrice: state.totalPrice - INGREDIENTPRICES[action.ingredientName]
             }
+
+        //if want to use this in axios.then
+        // case actionTypes.SET_INGREDIENTS:
+        // console.log(action.ingredients)    
+        // return{
+
+        //         ...state, 
+        //         ingredients: action.ing
+        //     }
+
+        case actionTypes.SET_INGREDIENTS:
+            return {
+                ...state,
+                ingredients: action.ing, 
+                error: false
+
+            }
+
+        case actionTypes.FETCH_ING_FAILED:
+            return {
+                ...state, error: true
+            }
+
 
         default:
             return state
