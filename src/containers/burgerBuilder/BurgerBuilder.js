@@ -121,41 +121,23 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        this.setState({
-            loading: true
-        })
 
 
-        //alert("You have continued")
-        //will send post request to baseUlr + /orders, need .json for firebase
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: "Connor",
-                address: {
-                    street: "Test Street",
-                    zipCode: "88545",
-                    country: "USA"
-                },
-                email: "Test@test.com",
-            },
-            deliveryMethod: "ASAP"
+        const params = []
+
+        //going to loop through ingredients and create an array of ingredients with the stucture [lettuce=1, meat=2 etc...]
+        for (let i in this.state.ingredients) {
+            params.push(encodeURIComponent(i) + "=" + encodeURIComponent(this.state.ingredients[i]))
         }
-        axios.post("/orders.json", order)
-            .then(response => {
-                console.log(response)
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                })
-            }).catch(err => {
-                console.log(err)
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                })
-            })
+
+        params.push("price=" + this.state.totalPrice)
+        //going to turn that array into a string with teh structure "lettuce=1&meat=2 etc..." for use in the search parameter
+        const queryString = params.join("&")
+
+        this.props.history.push({
+            pathname: "/checkout",
+            search: "?" + queryString
+        })
     }
 
 

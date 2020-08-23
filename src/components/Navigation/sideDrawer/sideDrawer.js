@@ -8,7 +8,7 @@ const sideDrawer = (props) => {
     
     let attachedClasses = [classes.SideDrawer, classes.Closed]
 
-    if(props.open ){
+    if(props.open){
         attachedClasses=[classes.SideDrawer, classes.Open]
     }
     return (

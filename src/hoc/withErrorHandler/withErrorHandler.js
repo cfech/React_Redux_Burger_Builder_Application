@@ -15,7 +15,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
         componentWillMount() {
 
             //reference to interceptor
-          this.reqInterceptor =  axios.interceptors.request.use(req => {
+            this.reqInterceptor = axios.interceptors.request.use(req => {
                 this.setState({
                     err: null
                 })
@@ -25,7 +25,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
 
 
             // will return the response to the .then statement, the error is coming back from firebase, 
-            this.resInterceptor =  axios.interceptors.response.use(res => res, error => {
+            this.resInterceptor = axios.interceptors.response.use(res => res, error => {
                 this.setState({
                     err: error
                 })
@@ -33,7 +33,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
         }
 
         //used when a component is not required any more 
-        componentWillUnmount(){
+        componentWillUnmount() {
             console.log("will unmont interceptors")
             //this will remove interceptors when component unmounts: ie we switch to a different page
             axios.interceptors.request.eject(this.reqInterceptor)
@@ -41,7 +41,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
 
         }
 
-        errorConfirmedHandler = () =>{
+        errorConfirmedHandler = () => {
             this.setState({
                 err: null
             })
@@ -50,9 +50,9 @@ const withErrorHandler = (WrappedComponent, axios) => {
             return (
                 <Aux>
 
-                    <Modal 
-                    show ={this.state.err}
-                    modalClosed ={this.errorConfirmedHandler}
+                    <Modal
+                        show={this.state.err}
+                        modalClosed={this.errorConfirmedHandler}
                     >
                         {this.state.err ? this.state.err.message : null}
                     </Modal>
