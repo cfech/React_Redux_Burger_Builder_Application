@@ -115,7 +115,8 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.price,
-            orderData: formData
+            orderData: formData, 
+            timeStamp: new Date()
         }
 
         //will send post request to baseUlr + /orders, need .json for firebase
