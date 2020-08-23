@@ -8,7 +8,7 @@ class Modal extends Component {
     //by changing the way hat the modal updates, we can change teh way its children update therefore improving the application so that the children only update when the modal needs to, not at every click, only when props.show would change
     shouldComponentUpdate(nextProps, nextState) {
 
-        if (nextProps.show !== this.props.show) {
+        if (nextProps.show !== this.props.show || nextProps.children !== this.props.children) {
             return true
         }
         return false

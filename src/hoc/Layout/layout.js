@@ -16,6 +16,7 @@ class Layout extends Component {
         })
     }
 
+    //use the anonymous function to change state when dependent on previous state to enure the exact previous state is used
     openSideDrawer = () => {
         this.setState(
             (prevState) => {
