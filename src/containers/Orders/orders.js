@@ -8,6 +8,8 @@ class Orders extends Component {
         Orders: [],
         Loading: true
     }
+
+    //get the orders in the data base
     componentDidMount() {
         axios.get("/orders.json")
             .then(res => {
@@ -47,17 +49,13 @@ class Orders extends Component {
         return (
             <div>
                 {this.state.Orders.map(order => (
-                    <Order key = {order.id} ingredients ={order.ingredients} price ={order.price}/>
+                    <Order key={order.id} ingredients={order.ingredients} price={order.price} />
                 ))
-
                 }
             </div>
-
         )
     }
 }
-
-
 
 
 export default withErrorHandler(Orders, axios)

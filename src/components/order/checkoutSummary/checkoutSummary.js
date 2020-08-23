@@ -6,7 +6,7 @@ import classes from './checkoutSummary.css'
 
 const checkoutSummary = (props) => {
 
-    //history object of the router made available by using withRouter
+//history object of the router made available by using withRouter or passing {...props} from high level component
 const cancelOrderHandler = () => {
 
     props.history.goBack()
