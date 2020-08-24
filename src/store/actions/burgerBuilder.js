@@ -19,7 +19,7 @@ export const removeIngredient = (ingName) => {
 
 
 //async action creator
-//has access to dispatch from thunk 
+//has access to dispatch from thunk , called on load of homepage
 export const initIngredients = () => {
     return dispatch => {
         axios.get("https://react-burger-builder-5a549.firebaseio.com/ingredients.json")
@@ -40,6 +40,7 @@ const setIngredients = (ingredients) => {
     }
 }
 
+//synchronous action creator
 export const fetchIngredientsFailed = () => {
     return {
         type: actionTypes.FETCH_ING_FAILED

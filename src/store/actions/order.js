@@ -35,7 +35,7 @@ export const orderFailure = (err) => {
     }
 }
 
-//for changing the loading state
+//for changing the loading state and displaying the spinner
 export const purchaseBurgerStart = () => {
     return {
         type: actionTypes.ORDER_BURGER_START
@@ -50,3 +50,64 @@ export const purchaseInit = () => {
     }
 }
 
+//---------------------------FOR FETCHING ORDERS---------------------
+
+//need thunk to access dispatch
+export const initFetchingOrders = () => {
+    return dispatch => {
+
+        //to set loading state
+        dispatch(fetchOrderStart())
+
+        axios.get('/orders.json')
+            .then((response) => {
+                console.log("[orders action creator ]", response)
+                //formating an object to an array
+                // const fetchedOrders = Object.entries(res.data)
+                // console.log("Orders -> componentDidMount -> fetchedOrders", fetchedOrders)
+
+                const fetchedOrders = []
+
+                for (let key in response.data) {
+                    console.log(response.data[key])
+                    fetchedOrders.push({
+                        ...response.data[key],
+                        id: key
+
+                    })
+                    console.log("Orders -> componentDidMount -> fetchedOrders", fetchedOrders)
+                }
+
+
+                dispatch(fetchOrdersSuccess(fetchedOrders))
+            })    
+            .catch((err) => {
+                console.log("[orders action creator ]", err)
+                dispatch(fetchOrdersFailed(err))
+            })
+    }
+
+}
+
+//synchronous action creator 
+export const fetchOrdersSuccess = (ord) => {
+    return {
+        type: actionTypes.FETCH_ORDERS_SUCCESS,
+        orders: ord
+    }
+}
+
+//synchronous action creator
+export const fetchOrdersFailed = (err) => {
+    return {
+        type: actionTypes.FETCH_ORDERS_FAILED,
+        error: err
+    }
+}
+
+//for changing the loading state and displaying the spinner
+export const fetchOrderStart = () => {
+    return {
+        type: actionTypes.FETCH_ORDERS_START
+    }
+}

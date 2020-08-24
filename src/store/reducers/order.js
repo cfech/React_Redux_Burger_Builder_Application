@@ -7,7 +7,7 @@ import * as actionTypes from "../actions/actionTypes"
 const initialState = {
     orders: [],
     loading: false,
-    error: null, 
+    error: null,
     purchased: false,
 }
 
@@ -36,18 +36,41 @@ const reducer = (state = initialState, action) => {
                 loading: false
             }
 
-            //for setting loading state to initiate spinner 
-            case actionTypes.ORDER_BURGER_START:
-                return{
-                    ...state, 
-                    loading: true
-                }
+        //for setting loading state to initiate spinner 
+        case actionTypes.ORDER_BURGER_START:
+            return {
+                ...state,
+                loading: true
+            }
 
-                case actionTypes.PURCHASE_INIT:
-                    return{
-                        ...state, 
-                        purchased: false
-                    }
+        //for when user makes a second purchase, resetting the state/props that sets the redirect from checkout page
+        case actionTypes.PURCHASE_INIT:
+            return {
+                ...state,
+                purchased: false
+            }
+
+        //for managing orders page loading state, 
+        case actionTypes.FETCH_ORDERS_START:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case actionTypes.FETCH_ORDERS_SUCCESS:
+            return {
+                ...state,
+                orders: action.orders,
+                loading: false
+            }
+
+        case actionTypes.FETCH_ORDERS_FAILED:
+            return {
+                ...state,
+                //error is handled in hoc
+                // error: action.error,
+                loading: false
+            }
         default:
             return state;
     }

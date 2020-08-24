@@ -15,7 +15,7 @@ class Modal extends Component {
     }
 
     //if shouldComponentUpdate returns true , this function will run
-    componentWillUpdate() {
+    UNSAFE_componentWillUpdate() {
         console.log("[Modal], will update")
     }
 
