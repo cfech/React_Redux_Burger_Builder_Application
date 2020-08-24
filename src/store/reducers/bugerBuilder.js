@@ -1,3 +1,5 @@
+//data flow = click Button -> mapDispatchToProps -> actionTypes -> actionCreators ->  middleware(index.js) -> REDUCER, updates state -> component -> UI
+
 import * as actionTypes from "../actions/actionTypes"
 //reducer for burger builder
 
@@ -56,7 +58,8 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 ingredients: action.ing, 
-                error: false
+                error: false, 
+                totalPrice: 4
 
             }
 

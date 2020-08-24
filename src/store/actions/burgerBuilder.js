@@ -1,5 +1,5 @@
 //action creators for building burger
-
+//data flow = click Button -> mapDispatchToProps -> actionTypes -> ACTIONCREATORS ->  middleware(index.js) -> reducer, updates state -> component -> UI
 
 import * as actionTypes from "./actionTypes"
 import axios from "../../axios_orders"

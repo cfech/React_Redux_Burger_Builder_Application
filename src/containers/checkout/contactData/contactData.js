@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import Button from "../../../components/UI/button/button"
 import classes from './contactData.css'
-import axios from '../../../axios_orders'
 import Spinner from "../../../components/UI/Spinner/spinner"
 import Input from "../../../components/UI/inputEl/inputEl"
+
+import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler"
+import axios from "../../../axios_orders"
+
+import { connect } from "react-redux"
+import * as actionCreators from "../../../store/actions/index"
 
 
 
@@ -91,18 +96,12 @@ class ContactData extends Component {
                 valid: true
             },
         },
-        loading: false,
         formIsValid: false
 
     }
 
     orderHandler = (e) => {
         e.preventDefault()
-        console.log(this.props.ingredients)
-
-        this.setState({
-            loading: true
-        })
 
         const formData = {}
 
@@ -115,24 +114,13 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.price,
-            orderData: formData, 
+            orderData: formData,
             timeStamp: new Date()
         }
 
+        this.props.initiateOrder(order)
         //will send post request to baseUlr + /orders, need .json for firebase
-        axios.post("/orders.json", order)
-            .then(response => {
-                console.log(response)
-                this.setState({
-                    loading: false
-                })
-                this.props.history.push("/")
-            }).catch(err => {
-                console.log(err)
-                this.setState({
-                    loading: false
-                })
-            })
+
     }
 
 
@@ -236,7 +224,7 @@ class ContactData extends Component {
         </form>
         )
 
-        if (this.state.loading) {
+        if (this.props.loading) {
             form = <Spinner />
         }
 
@@ -250,4 +238,21 @@ class ContactData extends Component {
 
 }
 
-export default ContactData
+
+//data flow = CLICK BUTTON -> MAPDISPATCHTOPROPS -> actionTypes -> actionCreators ->  middleware(index.js) -> reducer, updates state -> COMPONENT -> UI
+const mapStateToProps = state => {
+    return ({
+        ingredients: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
+        loading: state.orders.loading
+    })
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        initiateOrder: (order) => dispatch(actionCreators.initiateOrder(order))
+    }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios))
