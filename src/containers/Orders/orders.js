@@ -3,6 +3,7 @@ import Order from "../../components/order/order/order"
 import axios from '../../axios_orders'
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler"
 import Spinner from "../../components/UI/Spinner/spinner"
+import { Link } from "react-router-dom"
 
 //-------------------------------------------for redux--------------------------------
 import * as actionCreators from "../../store/actions/index"
@@ -16,7 +17,9 @@ class Orders extends Component {
         this.props.onInitiateOrderFetching()
     }
 
-
+    getId = (id) => {
+        console.log(id)
+    }
 
     // render() {
     //     let orders = <Spinner></Spinner>
@@ -38,11 +41,34 @@ class Orders extends Component {
 
     render() {
 
+        let orderMessage = null
+        if (this.props.orders.length === 0 && !this.props.loading) {
+            orderMessage = <div style={{
+                width: "70%",
+                margin: "auto",
+                textAlign: "center",
+                border: "5px solid #ccc",
+                boxShadow: "-10px 5px 5px #eee",
+                position: "relative",
+                top: "200px",
+                padding: "20px"
+            }} >
+                <h3>Looks Like there is nothing here</h3>
+                <h3>Please Create An Order:</h3>
+                <Link to="/" style={{
+                    textDecoration: "none",
+                    fontSize: "20px",
+                    color: "purple"
+                }}>BurgerBuilder</Link>
+            </div>
+        }
 
         return (
             <div>
+                {orderMessage}
+
                 {this.props.loading ? <Spinner></Spinner> : this.props.orders.map(order => (
-                    <Order key={order.id} ingredients={order.ingredients} price={order.price} />
+                    <Order key={order.id} delete={() => this.props.onDelete(order.id)} ingredients={order.ingredients} price={order.price} />
                 ))}
             </div>
         )
@@ -64,6 +90,9 @@ const mapDispatchToProps = dispatch => {
     return {
         onInitiateOrderFetching: () => {
             return dispatch(actionCreators.initFetchingOrders())
+        },
+        onDelete: (id) => {
+            return dispatch(actionCreators.deleteOrderStart(id))
         }
     }
 }

@@ -17,5 +17,9 @@ export{
     //fetching orders
     initFetchingOrders, 
     //loading prop
-    fetchOrderStart
+    fetchOrderStart, 
+
+
+
+    deleteOrderStart
 } from "./order"

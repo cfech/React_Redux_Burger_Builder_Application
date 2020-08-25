@@ -111,3 +111,25 @@ export const fetchOrderStart = () => {
         type: actionTypes.FETCH_ORDERS_START
     }
 }
+
+
+
+//---------------------------FOR DELETING_ORDERS ORDERS---------------------
+
+export const deleteOrderStart = (id) => {
+    return dispatch => {
+        console.log(id)
+        axios.delete(`/orders/${id}.json`)
+        .then((res) =>{
+            console.log(res)
+            dispatch(initFetchingOrders())
+        } )
+        .catch(err => {
+            console.log(err)
+            dispatch(fetchOrdersFailed(err))
+        })
+    }
+
+}
+
+

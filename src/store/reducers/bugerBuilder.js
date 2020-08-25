@@ -3,6 +3,9 @@
 import * as actionTypes from "../actions/actionTypes"
 //reducer for burger builder
 
+//THIS REDUCER IS THE LEANED OUT EXAMPLE , USING UTILITY FUNCTIONS AND EXTRACTED LOGIC
+import { updateObject } from "../utility"
+
 
 const initialState = {
     ingredients: null,
@@ -19,56 +22,57 @@ const INGREDIENTPRICES = {
 }
 
 
+const addIngredient = (state, action) => {
+     const updatedIngredient = { [action.ingredientName]: state.ingredients[action.ingredientName] + 1 }
+            const updatedIngredients = updateObject(state.ingredients, updatedIngredient)
+            const updatedState = {
+                ingredients: updatedIngredients,
+                totalPrice: state.totalPrice + INGREDIENTPRICES[action.ingredientName]
+            }
+            return updateObject(state, updatedState)
+}
+
+const deleteIngredient = (state, action) => {
+    const updatedIng = { [action.ingredientName]: state.ingredients[action.ingredientName] - 1 }
+            const updatedIngs = updateObject(state.ingredients, updatedIng)
+            const updatedSTate = {
+                ingredients: updatedIngs,
+                totalPrice: state.totalPrice - INGREDIENTPRICES[action.ingredientName]
+            }
+            return updateObject(state, updatedSTate)
+}
+
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        //--------------------outsourced function example------------------------------
         case actionTypes.ADD_INGREDIENT:
-            return {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    //will be the ingredient over ridden: the new value of that ingredient
-                    //cheese : 0 + 1
-                    [action.ingredientName]: state.ingredients[action.ingredientName] + 1
-                },
-                totalPrice: state.totalPrice + INGREDIENTPRICES[action.ingredientName]
-            }
+           return addIngredient(state, action)
         case actionTypes.REMOVE_INGREDIENT:
-            return {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    //will be the ingredient over ridden: the new value of that ingredient
-                    //cheese : 0 + 1
-                    [action.ingredientName]: state.ingredients[action.ingredientName] - 1
-                },
-                totalPrice: state.totalPrice - INGREDIENTPRICES[action.ingredientName]
-            }
+            return deleteIngredient(state, action)
+//--------------------outsourced function example------------------------------
 
-        //if want to use this in axios.then
+
+
+
+        //if want to use this in axios.then to call action creator
         // case actionTypes.SET_INGREDIENTS:
         // console.log(action.ingredients)    
         // return{
-
         //         ...state, 
         //         ingredients: action.ing
         //     }
 
         case actionTypes.SET_INGREDIENTS:
-            return {
-                ...state,
-                ingredients: action.ing, 
-                error: false, 
-                totalPrice: 4
 
-            }
+            return updateObject(state, {
+                ingredients: action.ing,
+                error: false,
+                totalPrice: 4
+            })
 
         case actionTypes.FETCH_ING_FAILED:
-            return {
-                ...state, error: true
-            }
-
-
+            return updateObject(state, { error: true })
         default:
             return state
     }

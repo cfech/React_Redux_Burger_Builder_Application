@@ -25,7 +25,7 @@ class Checkout extends Component {
         if (this.props.ing) {
 
             //for redirecting if the purchase submission was a success, state set in a successful case in the order reducer, which would be called from a synchronous function in the .then of the axios call in the order actionCreators 
-            const purchasedRedirect = this.props.purchased ? <Redirect to ="/"/>: null
+            const purchasedRedirect = this.props.purchased ? <Redirect to ="/orders"/>: null
 
 
             summary =

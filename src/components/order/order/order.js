@@ -34,6 +34,8 @@ const order = (props) => {
             </p>
 
             <p>Price  <strong>{parseFloat(props.price).toFixed(2)} USD</strong></p>
+
+            <button onClick={props.delete} ></button>
         </div>
     )
 };

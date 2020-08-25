@@ -18,3 +18,6 @@ export const PURCHASE_INIT = "PURCHASE_INIT"
 export const FETCH_ORDERS_START = "FETCH_ORDERS_START"
 export const FETCH_ORDERS_SUCCESS ="FETCH_ORDERS_SUCCESS"
 export const FETCH_ORDERS_FAILED = "FETCH_ORDERS_FAILED"
+
+//for deleting orders 
+// export const DELETE_ORDER = "DELETE_ORDER"
