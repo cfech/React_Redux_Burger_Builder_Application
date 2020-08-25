@@ -20,6 +20,10 @@ export{
     fetchOrderStart, 
 
 
+//deleting order
+    deleteOrderStart,
 
-    deleteOrderStart
+    //getting 1 order
+
+    getOrder
 } from "./order"

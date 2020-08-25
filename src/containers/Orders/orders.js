@@ -5,9 +5,11 @@ import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler"
 import Spinner from "../../components/UI/Spinner/spinner"
 import { Link } from "react-router-dom"
 
+
 //-------------------------------------------for redux--------------------------------
 import * as actionCreators from "../../store/actions/index"
 import { connect } from "react-redux"
+
 
 
 class Orders extends Component {
@@ -17,29 +19,14 @@ class Orders extends Component {
         this.props.onInitiateOrderFetching()
     }
 
-    getId = (id) => {
-        console.log(id)
-    }
-
-    // render() {
-    //     let orders = <Spinner></Spinner>
-
-    //     if (!this.props.loading) {
-    //         orders = this.props.orders.map(order => (
-    //             <Order key={order.id} ingredients={order.ingredients} price={order.price} />
-    //         ))
-
-    //     }
-
-    //     return (
-    //         <div>
-    //             {orders}
-    //         </div>
-    //     )
-    // }
-
-
+   
     render() {
+
+        const advancePage = (id) => {
+            this.props.history.push({
+                pathname: this.props.match.url + "/" + id
+            })
+        }
 
         let orderMessage = null
         if (this.props.orders.length === 0 && !this.props.loading) {
@@ -56,9 +43,9 @@ class Orders extends Component {
                 <h3>Looks Like there is nothing here</h3>
                 <h3>Please Create An Order:</h3>
                 <Link to="/" style={{
-                    textDecoration: "none",
                     fontSize: "20px",
-                    color: "purple"
+                    color: "blue", 
+                    cursor: "pointer"
                 }}>BurgerBuilder</Link>
             </div>
         }
@@ -68,8 +55,10 @@ class Orders extends Component {
                 {orderMessage}
 
                 {this.props.loading ? <Spinner></Spinner> : this.props.orders.map(order => (
-                    <Order key={order.id} delete={() => this.props.onDelete(order.id)} ingredients={order.ingredients} price={order.price} />
+                    <Order key={order.id} clicked={() => advancePage(order.id)} delete={() => this.props.onDelete(order.id)} ingredients={order.ingredients} price={order.price} />
                 ))}
+
+                
             </div>
         )
     }
@@ -93,6 +82,9 @@ const mapDispatchToProps = dispatch => {
         },
         onDelete: (id) => {
             return dispatch(actionCreators.deleteOrderStart(id))
+        },
+        getOneItem: (id) => {
+            return dispatch(actionCreators.getOrder(id))
         }
     }
 }

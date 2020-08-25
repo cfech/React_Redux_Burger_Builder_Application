@@ -9,6 +9,8 @@ const initialState = {
     loading: false,
     error: null,
     purchased: false,
+    order: null,
+    ing: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -70,6 +72,25 @@ const reducer = (state = initialState, action) => {
                 //error is handled in hoc
                 // error: action.error,
                 loading: false
+            }
+
+        case actionTypes.GET_ORDER_SUCCESS:
+            let newIngredients = []
+
+            for (let ingredientName in action.order.ingredients) {
+                newIngredients.push({
+                    name: ingredientName,
+                    amount: action.order.ingredients[ingredientName]
+                })
+            }
+
+
+            return {
+                ...state,
+                order: {
+                    ...action.order,
+                    ing: newIngredients
+                }
             }
         default:
             return state;

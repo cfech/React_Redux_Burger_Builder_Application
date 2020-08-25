@@ -132,4 +132,27 @@ export const deleteOrderStart = (id) => {
 
 }
 
+//---------------FOR GETTING 1 ORDER ------------
+    export const getOrder = (id ) => {
+        return dispatch => {
+            console.log(id)
+            axios.get(`/orders/${id}.json`)
+            .then(res => {
+                console.log("------------------")
+                console.log(res)
+                dispatch(getOrderSuccess(res.data))
+            }).catch(err => {
+                console.log(err)
+                dispatch(fetchOrdersFailed(err))
+            })
+        }
+    }
+
+export const getOrderSuccess = (order) => {
+    return{
+        type: actionTypes.GET_ORDER_SUCCESS, 
+        order: order
+    }
+} 
+
 

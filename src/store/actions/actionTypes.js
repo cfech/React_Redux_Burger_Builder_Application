@@ -20,4 +20,4 @@ export const FETCH_ORDERS_SUCCESS ="FETCH_ORDERS_SUCCESS"
 export const FETCH_ORDERS_FAILED = "FETCH_ORDERS_FAILED"
 
 //for deleting orders 
-// export const DELETE_ORDER = "DELETE_ORDER"
+export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS"

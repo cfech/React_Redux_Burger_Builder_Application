@@ -35,7 +35,14 @@ const order = (props) => {
 
             <p>Price  <strong>{parseFloat(props.price).toFixed(2)} USD</strong></p>
 
-            <button onClick={props.delete} ></button>
+            <button style={{
+                cursor:"pointer"
+            }}  onClick={props.delete} >Delete</button>
+
+            <p style={{
+                textDecoration: "underline",
+                cursor:"pointer" 
+            }} onClick={props.clicked} >view more info</p>
         </div>
     )
 };
