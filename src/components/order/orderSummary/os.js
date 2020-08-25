@@ -66,7 +66,7 @@ class orderSummary extends Component {
 
 
                 <p>Email: {this.props.order.orderData.email}</p>
-                <p>Address: {this.props.order.orderData.street, this.props.order.orderData.country, this.props.order.orderData.zipCode}</p>
+                <p>Address: {this.props.order.orderData.street+  " " + this.props.order.orderData.state +  " " + this.props.order.orderData.country +  " " + this.props.order.orderData.zipCode}</p>
                 <p>Delivery Method: {this.props.order.orderData.deliveryMethod} </p>
 
                 <p> Price  <strong>{parseFloat(this.props.order.price).toFixed(2)} USD</strong></p >

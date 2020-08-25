@@ -28,6 +28,19 @@ class ContactData extends Component {
                 valid: false,
                 touched: false
             },
+            state: {
+                elementType: "input",
+                elementConfig: {
+                    type: "text",
+                    placeholder: "State",
+                },
+                value: "",
+                validation: {
+                    required: true
+                },
+                valid: false,
+                touched: false
+            },
             street: {
                 elementType: "input",
                 elementConfig: {
