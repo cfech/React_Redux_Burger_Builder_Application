@@ -27,3 +27,7 @@ export{
 
     getOrder
 } from "./order"
+
+export{
+    authInit
+} from "./auth"

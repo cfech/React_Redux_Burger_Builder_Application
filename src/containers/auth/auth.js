@@ -2,6 +2,14 @@ import React, { Component } from 'react'
 import Input from "../../components/UI/inputEl/inputEl"
 import Button from "../../components/UI/button/button"
 import classes from './auth.css'
+import Spinner from "../../components/UI/Spinner/spinner"
+
+
+//redux
+import { connect } from "react-redux"
+import * as actionCreators from "../../store/actions/index"
+
+
 
 class Auth extends Component {
     state = {
@@ -34,9 +42,12 @@ class Auth extends Component {
                 valid: false,
                 touched: false
             },
-        }
+        },
+        isSignUp: true
     }
 
+
+    // to check if each form element is valid
     checkValidity(value, rules) {
         let isValid = true
         if (!rules) {
@@ -92,6 +103,29 @@ class Auth extends Component {
         })
     }
 
+    //to sign in/sign up someone based on this.state.isSignUp (url is swapped in the action creator)
+    initAuth = (e) => {
+        e.preventDefault()
+        const user = {
+            email: this.state.controls.email.value,
+            password: this.state.controls.password.value
+        }
+
+        this.props.createUser(user, this.state.isSignUp)
+    }
+
+    //to switch the state back and forth between sign in and sign up
+    switchAuthModeHandler = () => {
+        this.setState(prevState => {
+            return {
+                isSignUp: !prevState.isSignUp
+            }
+        })
+    }
+
+
+
+
     render() {
 
         //for turing form state into a mappable array
@@ -105,7 +139,9 @@ class Auth extends Component {
             })
         }
 
-        const form = formElementArray.map(formElement => (
+
+        //to render the form elements 
+        let form = formElementArray.map(formElement => (
             <Input key={formElement.id}
                 elementType={formElement.config.elementType}
                 elementConfig={formElement.config.elementConfig}
@@ -117,16 +153,92 @@ class Auth extends Component {
             />
 
         ))
+
+        //to handle loading case
+        if (this.props.loading) {
+            form = <Spinner></Spinner>
+        }
+
+        let errorMessage = null
+
+        if (this.props.error) {
+            // errorMessage = this.props.error.data.error.message
+            if (this.props.error.data.error.message === "EMAIL_EXISTS") {
+                errorMessage = <p style={{
+                    color: "#6f7c80",
+                    fontSize: "15px",
+                    textDecoration: "underline"
+                }}>Your Email is already registered</p>
+
+            }
+
+            if (this.props.error.data.error.message === "TOO_MANY_ATTEMPTS_TRY_LATER") {
+                errorMessage = <p style={{
+                    color: "#6f7c80",
+                    fontSize: "15px",
+                    textDecoration: "underline"
+                }}>Your have too many unsuccessful attempts, please try again later</p>
+
+            }
+
+            if (this.props.error.data.error.message === "EMAIL_NOT_FOUND") {
+                errorMessage = <p style={{
+                    color: "#6f7c80",
+                    fontSize: "15px",
+                    textDecoration: "underline"
+                }}>This email is not in our system</p>
+
+            }
+
+            if (this.props.error.data.error.message === "INVALID_PASSWORD") {
+                errorMessage = <p style={{
+                    color: "#6f7c80",
+                    fontSize: "15px",
+                    textDecoration: "underline"
+                }}>Password doesn't seem correct</p>
+
+            }
+
+            if (this.props.error.data.error.message === "USER_DISABLED") {
+                errorMessage = <p style={{
+                    color: "#6f7c80",
+                    fontSize: "15px",
+                    textDecoration: "underline"
+                }}>This account has been disabledt</p>
+
+            }
+        }
+
         return (
             <div className={classes.Auth}>
-                <form>
+                {errorMessage}
+                <form onSubmit={this.initAuth} >
                     {form}
-                    <Button btnType="Success">Sign</Button>
+                    <Button btnType="Success">{this.state.isSignUp ? "SIGN UP" : 'SIGN IN'}</Button>
                 </form>
+
+
+                <Button btnType="Danger" clicked={this.switchAuthModeHandler} >  Switch to {this.state.isSignUp ? "SIGN IN" : 'SIGN UP'}</Button>
             </div>
         )
     }
 }
 
+//data flow = CLICK BUTTON -> MAPDISPATCHTOPROPS -> actionTypes -> actionCreators ->  middleware(index.js) -> reducer, updates state -> COMPONENT -> UI
 
-export default Auth
+const mapStateToProps = state => {
+    return (
+        {
+            loading: state.auth.loading,
+            error: state.auth.error
+        })
+}
+
+const mapDispatchToProps = dispatch => {
+    return ({
+        createUser: (user, isSignUp) => { dispatch(actionCreators.authInit(user, isSignUp)) }
+    })
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth)

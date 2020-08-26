@@ -21,3 +21,8 @@ export const FETCH_ORDERS_FAILED = "FETCH_ORDERS_FAILED"
 
 //for deleting orders 
 export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS"
+
+//for signing up/in
+export const AUTH_START = "AUTH_START"
+export const AUTH_SUCCESS = "AUTH_SUCCESS"
+export const AUTH_FAILED= "AUTH_FAILED"
