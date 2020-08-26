@@ -29,6 +29,25 @@ export const authFailed = (err) => {
     }
 }
 
+//to call a function to log out the user after 1 hr , or any expiration time
+export const checkAuthTimeout=(expirationTime) => {
+return dispatch => {
+    setTimeout(() => {
+        dispatch(logOut())
+    }, expirationTime *1000)
+
+}
+}
+
+
+//for logging user out 
+export const logOut= () => {
+    return{ 
+        type: actionTypes.AUTH_LOGOUT
+    }
+
+}
+
 
 //asynchronous action creator for singing in/up a user , depending on the isSignUp boolean value
 export const authInit = (user, isSignUp) => {
@@ -51,6 +70,7 @@ export const authInit = (user, isSignUp) => {
             .then(res => {
                 console.log(res)
                 dispatch(authSuccess(res.data))
+                dispatch(checkAuthTimeout(res.data.expiresIn))
             }).catch(err => {
                 console.log(err)
                 console.log(err.response)
