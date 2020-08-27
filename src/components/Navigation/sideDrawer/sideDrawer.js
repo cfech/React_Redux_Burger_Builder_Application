@@ -20,7 +20,7 @@ const sideDrawer = (props) => {
                 </div>
 
                 <nav>
-                    <NavigationItems />
+                    <NavigationItems isLoggedIn ={props.isLoggedIn} />
                 </nav>
             </div>
         </Aux>

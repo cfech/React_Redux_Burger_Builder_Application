@@ -29,5 +29,6 @@ export{
 } from "./order"
 
 export{
-    authInit
+    authInit, 
+    logout
 } from "./auth"

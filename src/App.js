@@ -6,6 +6,7 @@ import { Route, Switch } from "react-router-dom"
 import Orders from "./containers/Orders/orders"
 import OrderSummary from "./components/order/orderSummary/os"
 import Auth from "./containers/auth/auth"
+import Logout from "./containers/auth/logout/logout"
 
 class App extends Component {
 
@@ -21,6 +22,7 @@ class App extends Component {
             <Route path={"/orders/:id"} exact component={OrderSummary} />
             <Route path = "/orders" component={Orders}/>
             <Route path = "/auth" component={Auth}/>
+            <Route path = "/logout" component={Logout}/>
             <Route exact path="/" component={BurgerBuilder} />
             <Route component={BurgerBuilder}/>
           </Switch>

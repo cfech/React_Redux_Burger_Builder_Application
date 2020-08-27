@@ -64,7 +64,7 @@ export const authFailed = (err) => {
 export const checkAuthTimeout=(expirationTime) => {
 return dispatch => {
     setTimeout(() => {
-        dispatch(logOut())
+        dispatch(logout())
     }, expirationTime *1000)
 
 }
@@ -72,7 +72,7 @@ return dispatch => {
 
 
 //for logging user out 
-export const logOut= () => {
+export const logout= () => {
     return{ 
         type: actionTypes.AUTH_LOGOUT
     }
