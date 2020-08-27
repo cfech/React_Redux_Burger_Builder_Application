@@ -16,10 +16,10 @@ class Orders extends Component {
 
     //get the orders in the data base
     componentDidMount() {
-        this.props.onInitiateOrderFetching()
+        this.props.onInitiateOrderFetching(this.props.token)
     }
 
-   
+
     render() {
 
         const advancePage = (id) => {
@@ -28,9 +28,28 @@ class Orders extends Component {
             })
         }
 
-        let orderMessage = null
-        if (this.props.orders.length === 0 && !this.props.loading) {
-            orderMessage = <div style={{
+        let orderMessageContent = <div style={{
+            width: "70%",
+            margin: "auto",
+            textAlign: "center",
+            border: "5px solid #ccc",
+            boxShadow: "-10px 5px 5px #eee",
+            position: "relative",
+            top: "200px",
+            padding: "20px"
+        }} >
+
+            <h3>Looks Like there is nothing here</h3>
+            <h3>PLease SIGN UP, or SIGN IN to create an order :</h3>
+            <Link to="/Auth" style={{
+                fontSize: "20px",
+                color: "blue",
+                cursor: "pointer"
+            }}>SIGN IN</Link>
+        </div>
+
+        if (this.props.token) {
+            orderMessageContent = <div style={{
                 width: "70%",
                 margin: "auto",
                 textAlign: "center",
@@ -40,14 +59,20 @@ class Orders extends Component {
                 top: "200px",
                 padding: "20px"
             }} >
+
                 <h3>Looks Like there is nothing here</h3>
                 <h3>Please Create An Order:</h3>
                 <Link to="/" style={{
                     fontSize: "20px",
-                    color: "blue", 
+                    color: "blue",
                     cursor: "pointer"
                 }}>BurgerBuilder</Link>
             </div>
+        }
+
+        let orderMessage = null
+        if (this.props.orders.length === 0 && !this.props.loading) {
+            orderMessage = orderMessageContent
         }
 
         return (
@@ -55,10 +80,10 @@ class Orders extends Component {
                 {orderMessage}
 
                 {this.props.loading ? <Spinner></Spinner> : this.props.orders.map(order => (
-                    <Order key={order.id} clicked={() => advancePage(order.id)} delete={() => this.props.onDelete(order.id)} ingredients={order.ingredients} price={order.price} />
+                    <Order key={order.id} clicked={() => advancePage(order.id)} delete={() => this.props.onDelete(order.id, this.props.token)} ingredients={order.ingredients} price={order.price} />
                 ))}
 
-                
+
             </div>
         )
     }
@@ -72,19 +97,17 @@ const mapStateToProps = (state) => {
     return {
         orders: state.orders.orders,
         loading: state.orders.loading,
+        token: state.auth.token
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitiateOrderFetching: () => {
-            return dispatch(actionCreators.initFetchingOrders())
+        onInitiateOrderFetching: (token) => {
+            return dispatch(actionCreators.initFetchingOrders(token))
         },
-        onDelete: (id) => {
-            return dispatch(actionCreators.deleteOrderStart(id))
-        },
-        getOneItem: (id) => {
-            return dispatch(actionCreators.getOrder(id))
+        onDelete: (id, token) => {
+            return dispatch(actionCreators.deleteOrderStart(id, token))
         }
     }
 }

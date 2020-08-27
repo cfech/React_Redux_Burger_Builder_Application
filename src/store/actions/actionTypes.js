@@ -20,7 +20,14 @@ export const FETCH_ORDERS_SUCCESS ="FETCH_ORDERS_SUCCESS"
 export const FETCH_ORDERS_FAILED = "FETCH_ORDERS_FAILED"
 
 //for deleting orders 
+export const DELETE_ORDER_STARTED = "DELETE_ORDER_STARTED"
+export const DELETE_ORDER_SUCCESS = "DELETE_ORDER_SUCCESS"
+export const DELETE_ORDER_FAILED = "DELETE_ORDER_FAILED"
+
+//for getting one order 
+export const GET_ORDER_START = "GET_ORDER_START"
 export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS"
+export const GET_ORDER_FAILED = "GET_ORDER_FAILED"
 
 //for signing up/in
 export const AUTH_START = "AUTH_START"

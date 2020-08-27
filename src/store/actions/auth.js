@@ -5,6 +5,36 @@ import * as actionTypes from "./actionTypes"
 import axios from "axios"
 
 
+//asynchronous action creator for singing in/up a user , depending on the isSignUp boolean value
+export const authInit = (user, isSignUp) => {
+    return dispatch => {
+        dispatch(authStart())
+        const authData = {
+            ...user,
+            returnSecureToken: true
+        }
+
+        //for signing up
+        let url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDyksb4UZ6Cac6c2InQlGJMknHV149eY2Q"
+
+        //for signing in
+        if (!isSignUp) {
+            url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDyksb4UZ6Cac6c2InQlGJMknHV149eY2Q"
+        }
+        console.log(authData)
+        axios.post(url, authData)
+            .then(res => {
+                console.log(res)
+                dispatch(authSuccess(res.data))
+                dispatch(checkAuthTimeout(res.data.expiresIn))
+            }).catch(err => {
+                console.log(err)
+                console.log(err.response)
+                dispatch(authFailed(err))
+            })
+    }
+}
+
 //synchronous action creator for setting loading state
 export const authStart = () => {
     return {
@@ -19,6 +49,7 @@ export const authSuccess = (authData) => {
         data: authData
     }
 }
+
 
 
 //synchronous action creator for passing along errors in a failed case
@@ -49,32 +80,3 @@ export const logOut= () => {
 }
 
 
-//asynchronous action creator for singing in/up a user , depending on the isSignUp boolean value
-export const authInit = (user, isSignUp) => {
-    return dispatch => {
-        dispatch(authStart())
-        const authData = {
-            ...user,
-            returnSecureToken: true
-        }
-
-        //for signing up
-        let url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDyksb4UZ6Cac6c2InQlGJMknHV149eY2Q"
-
-        //for signing in
-        if (!isSignUp) {
-            url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDyksb4UZ6Cac6c2InQlGJMknHV149eY2Q"
-        }
-        console.log(authData)
-        axios.post(url, authData)
-            .then(res => {
-                console.log(res)
-                dispatch(authSuccess(res.data))
-                dispatch(checkAuthTimeout(res.data.expiresIn))
-            }).catch(err => {
-                console.log(err)
-                console.log(err.response)
-                dispatch(authFailed(err))
-            })
-    }
-}

@@ -131,7 +131,9 @@ class ContactData extends Component {
             timeStamp: new Date()
         }
 
-        this.props.initiateOrder(order)
+        const token = this.props.token
+
+        this.props.initiateOrder(order, token)
         //will send post request to baseUlr + /orders, need .json for firebase
 
     }
@@ -257,13 +259,14 @@ const mapStateToProps = state => {
     return ({
         ingredients: state.burgerBuilder.ingredients,
         price: state.burgerBuilder.totalPrice,
-        loading: state.orders.loading
+        loading: state.orders.loading, 
+        token: state.auth.token
     })
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        initiateOrder: (order) => dispatch(actionCreators.initiateOrder(order))
+        initiateOrder: (order, token) => dispatch(actionCreators.initiateOrder(order, token))
     }
 
 }

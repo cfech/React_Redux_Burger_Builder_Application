@@ -12,7 +12,7 @@ class orderSummary extends Component {
     }
 
     componentDidMount() {
-        this.props.getOneItem(this.state.id)
+        this.props.getOneItem(this.state.id, this.props.token)
     }
 
     render(props) {
@@ -86,13 +86,14 @@ class orderSummary extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        order: state.orders.order
+        order: state.orders.order, 
+        token: state.auth.token
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        getOneItem: (id) => {
-            return dispatch(actionCreators.getOrder(id))
+        getOneItem: (id, token) => {
+            return dispatch(actionCreators.getOrder(id, token))
         }
     }
 }

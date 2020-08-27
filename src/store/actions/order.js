@@ -3,13 +3,14 @@ import * as actionTypes from "./actionTypes"
 import axios from "../../axios_orders"
 
 //async function, dispatch made available with thunk middleware
-export const initiateOrder = (order) => {
+export const initiateOrder = (order, token) => {
     return dispatch => {
+        console.log(token)
         //just for setting loading to true
         dispatch(purchaseBurgerStart())
 
         //to post a burger to the server
-        axios.post("/orders.json", order)
+        axios.post("/orders.json?auth=" + token, order)
             .then(response => {
                 console.log(response)
                 dispatch(orderSuccess(response.data.name, order))
@@ -53,13 +54,20 @@ export const purchaseInit = () => {
 //---------------------------FOR FETCHING ORDERS---------------------
 
 //need thunk to access dispatch
-export const initFetchingOrders = () => {
-    return dispatch => {
+export const initFetchingOrders = (token) => {
+    return (dispatch, getState) => {
+        //-------------IF WE JUST WANTED TO GET THAT STATE AND PASS THE TOKEN RIGHT HERE---------------------
+        // const state = getState()
+        // console.log("initFetchingOrders -> token", state)
+        // const token = state.auth.token
+        // console.log("initFetchingOrders -> token", token)
+        //-------------IF WE JUST WANTED TO GET THAT STATE AND PASS THE TOKEN RIGHT HERE---------------------
+        // axios.get('/orders.json?auth=' + token)
 
         //to set loading state
         dispatch(fetchOrderStart())
 
-        axios.get('/orders.json')
+        axios.get('/orders.json?auth=' + token)
             .then((response) => {
                 console.log("[orders action creator ]", response)
                 //formating an object to an array
@@ -80,7 +88,7 @@ export const initFetchingOrders = () => {
 
 
                 dispatch(fetchOrdersSuccess(fetchedOrders))
-            })    
+            })
             .catch((err) => {
                 console.log("[orders action creator ]", err)
                 dispatch(fetchOrdersFailed(err))
@@ -116,43 +124,75 @@ export const fetchOrderStart = () => {
 
 //---------------------------FOR DELETING_ORDERS ORDERS---------------------
 
-export const deleteOrderStart = (id) => {
-    return dispatch => {
-        console.log(id)
-        axios.delete(`/orders/${id}.json`)
-        .then((res) =>{
-            console.log(res)
-            dispatch(initFetchingOrders())
-        } )
-        .catch(err => {
-            console.log(err)
-            dispatch(fetchOrdersFailed(err))
-        })
+export const deleteOrderStart = (id, token) => {
+    return (dispatch, getState) => {
+        dispatch(deleteOrderStarted())
+        // const state = getState()
+        // console.log("initFetchingOrders -> state", state)
+        // const deleteToken = state.auth.token
+        // console.log("initFetchingOrders -> deleteToken", deleteToken)
+        // console.log(id)
+        axios.delete(`/orders/${id}.json?auth=` + token)
+            .then((res) => {
+                console.log(res)
+                dispatch(deleteOrderSuccess())
+                dispatch(initFetchingOrders(token))
+            })
+            .catch(err => {
+                console.log(err)
+                dispatch(deleteOrderFailed())
+                dispatch(fetchOrdersFailed(err))
+            })
     }
+}
 
+export const deleteOrderStarted = () => {
+    return { type: actionTypes.DELETE_ORDER_STARTED }
+}
+
+export const deleteOrderSuccess = () => {
+    return { type: actionTypes.DELETE_ORDER_SUCCESS }
+}
+
+export const deleteOrderFailed = () => {
+    return { type: actionTypes.DELETE_ORDER_FAILED }
 }
 
 //---------------FOR GETTING 1 ORDER ------------
-    export const getOrder = (id ) => {
-        return dispatch => {
-            console.log(id)
-            axios.get(`/orders/${id}.json`)
+export const getOrder = (id, token) => {
+    return (dispatch, getState) => {
+        dispatch(getOrderStart())
+        console.log(id)
+        axios.get(`/orders/${id}.json?auth=` + token)
             .then(res => {
                 console.log("------------------")
                 console.log(res)
                 dispatch(getOrderSuccess(res.data))
             }).catch(err => {
                 console.log(err)
+                dispatch(getOrderFailed())
                 dispatch(fetchOrdersFailed(err))
             })
-        }
     }
+}
 
 export const getOrderSuccess = (order) => {
-    return{
-        type: actionTypes.GET_ORDER_SUCCESS, 
+    return {
+        type: actionTypes.GET_ORDER_SUCCESS,
         order: order
     }
-} 
+}
+
+export const getOrderStart = () => {
+    return {
+        type: actionTypes.GET_ORDER_START
+    }
+}
+
+export const getOrderFailed = () => {
+    return {
+        type: actionTypes.GET_ORDER_FAILED
+    }
+}
 
 
