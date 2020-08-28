@@ -34,6 +34,7 @@ export const authInit = (user, isSignUp) => {
                 localStorage.setItem("userId", res.data.localId)
                 dispatch(authSuccess(res.data))
                 dispatch(checkAuthTimeout(res.data.expiresIn))
+
             }).catch(err => {
                 // console.log(err)
                 // console.log(err.response)
@@ -41,6 +42,9 @@ export const authInit = (user, isSignUp) => {
             })
     }
 }
+
+
+
 
 //synchronous action creator for setting loading state
 export const authStart = () => {

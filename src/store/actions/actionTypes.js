@@ -38,3 +38,7 @@ export const AUTH_LOGOUT = "AUTH_LOGOUT"
 
 //for conditional redirection
 export const SET_AUTH_REDIRECT_PATH = "SET_AUTH_REDIRECT_PATH "
+
+//purchase false
+
+export const SET_PURCHASED_TO_FALSE ="SET_PURCHASED_TO_FALSE"

@@ -92,6 +92,10 @@ const reducer = (state = initialState, action) => {
                     ing: newIngredients
                 }
             }
+
+            //this case it to avoid a random redirect when signing in and purchasing a burger
+            case actionTypes.SET_PURCHASED_TO_FALSE:
+                return{...state, purchased:false}
         default:
             return state;
     }

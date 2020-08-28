@@ -16,7 +16,7 @@ class Orders extends Component {
 
     //get the orders in the data base
     componentDidMount() {
-        this.props.onInitiateOrderFetching(this.props.token)
+        this.props.onInitiateOrderFetching(this.props.token, this.props.userId)
     }
 
 
@@ -80,7 +80,7 @@ class Orders extends Component {
                 {orderMessage}
 
                 {this.props.loading ? <Spinner></Spinner> : this.props.orders.map(order => (
-                    <Order key={order.id} clicked={() => advancePage(order.id)} delete={() => this.props.onDelete(order.id, this.props.token)} ingredients={order.ingredients} price={order.price} />
+                    <Order key={order.id} clicked={() => advancePage(order.id)} delete={() => this.props.onDelete(order.id, this.props.token, this.props.userId)} ingredients={order.ingredients} price={order.price} />
                 ))}
 
 
@@ -97,17 +97,18 @@ const mapStateToProps = (state) => {
     return {
         orders: state.orders.orders,
         loading: state.orders.loading,
-        token: state.auth.token
+        token: state.auth.token, 
+        userId: state.auth.userId
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitiateOrderFetching: (token) => {
-            return dispatch(actionCreators.initFetchingOrders(token))
+        onInitiateOrderFetching: (token, userId) => {
+            return dispatch(actionCreators.initFetchingOrders(token, userId))
         },
-        onDelete: (id, token) => {
-            return dispatch(actionCreators.deleteOrderStart(id, token))
+        onDelete: (id, token, userId) => {
+            return dispatch(actionCreators.deleteOrderStart(id, token, userId))
         }
     }
 }

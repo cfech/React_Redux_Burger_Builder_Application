@@ -25,7 +25,10 @@ export{
 
     //getting 1 order
 
-    getOrder
+    getOrder, 
+
+//to avoid unwanted redirect
+    resetPurchasedState
 } from "./order"
 
 export{

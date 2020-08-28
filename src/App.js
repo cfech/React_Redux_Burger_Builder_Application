@@ -14,32 +14,56 @@ import * as actionCreators from './store/actions/index'
 
 
 class App extends Component {
-  componentDidMount(){
+  componentDidMount() {
     this.props.checkUser()
   }
 
 
 
   render() {
+
+    //route guard for users that are not logged in
+    let routes = (
+      <Switch>
+        <Route path="/auth" component={Auth} />
+        <Route exact path="/" component={BurgerBuilder} />
+        <Route component={BurgerBuilder} />
+      </Switch>
+
+    )
+
+    //routes for users that are logged in
+    if (this.props.isLoggedIn) {
+      routes = (
+        <Switch>
+
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/auth" component={Auth} />
+          <Route path="/orders/:id" exact component={OrderSummary} />
+          <Route path="/orders" component={Orders} />
+          <Route path="/logout" component={Logout} />
+          <Route exact path="/" component={BurgerBuilder} />
+          <Route component={BurgerBuilder} />
+        </Switch>
+      )
+    }
+
     return (
       <div >
         <Layout>
-          <Switch>
-
-            <Route path="/checkout" component={Checkout} />
-            <Route path={"/orders/:id"} exact component={OrderSummary} />
-            <Route path="/orders" component={Orders} />
-            <Route path="/auth" component={Auth} />
-            <Route path="/logout" component={Logout} />
-            <Route exact path="/" component={BurgerBuilder} />
-            <Route component={BurgerBuilder} />
-          </Switch>
+          {routes}
         </Layout>
       </div>
 
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.auth.token !== null
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -50,4 +74,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 //you can wrap connect with withRouter to avoid any issues with appjs not having access to router props
-export default withRouter(connect(null, mapDispatchToProps)  (App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

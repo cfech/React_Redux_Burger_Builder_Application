@@ -54,7 +54,7 @@ export const purchaseInit = () => {
 //---------------------------FOR FETCHING ORDERS---------------------
 
 //need thunk to access dispatch
-export const initFetchingOrders = (token) => {
+export const initFetchingOrders = (token, userId) => {
     return (dispatch, getState) => {
         //-------------IF WE JUST WANTED TO GET THAT STATE AND PASS THE TOKEN RIGHT HERE---------------------
         // const state = getState()
@@ -67,7 +67,9 @@ export const initFetchingOrders = (token) => {
         //to set loading state
         dispatch(fetchOrderStart())
 
-        axios.get('/orders.json?auth=' + token)
+        //HOW WOULD YOU EVEN FIGURE OUT THIS SYNTAX???????????????///
+        const queryParams ='?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"'
+        axios.get(`/orders.json${queryParams}`)
             .then((response) => {
                 console.log("[orders action creator ]", response)
                 //formating an object to an array
@@ -124,7 +126,7 @@ export const fetchOrderStart = () => {
 
 //---------------------------FOR DELETING_ORDERS ORDERS---------------------
 
-export const deleteOrderStart = (id, token) => {
+export const deleteOrderStart = (id, token, userId) => {
     return (dispatch, getState) => {
         dispatch(deleteOrderStarted())
         // const state = getState()
@@ -136,7 +138,7 @@ export const deleteOrderStart = (id, token) => {
             .then((res) => {
                 console.log(res)
                 dispatch(deleteOrderSuccess())
-                dispatch(initFetchingOrders(token))
+                dispatch(initFetchingOrders(token, userId))
             })
             .catch(err => {
                 console.log(err)
@@ -163,6 +165,7 @@ export const getOrder = (id, token) => {
     return (dispatch, getState) => {
         dispatch(getOrderStart())
         console.log(id)
+        
         axios.get(`/orders/${id}.json?auth=` + token)
             .then(res => {
                 console.log("------------------")
@@ -196,3 +199,9 @@ export const getOrderFailed = () => {
 }
 
 
+// for setting purchased state to false to avoid unwanted redirect 
+export const resetPurchasedState = () => {
+    return{
+        type: actionTypes.SET_PURCHASED_TO_FALSE
+    }
+}
