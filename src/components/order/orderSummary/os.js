@@ -5,6 +5,8 @@ import * as actionCreators from "../../../store/actions/index"
 
 import Spinner from "../../UI/Spinner/spinner"
 
+import classes from './os.css'
+
 
 class orderSummary extends Component {
     state = {
@@ -20,27 +22,10 @@ class orderSummary extends Component {
         let output = <Spinner />
 
         if (this.props.order) {
-            output = <div style={{
-                width: "70%",
-                margin: "20px auto",
-                textAlign: "center",
-                border: "5px solid #ccc",
-                boxShadow: "-10px 5px 5px #eee",
-                position: "relative",
-                top: "200px",
-                padding: "20px"
-            }}>
+            output = <div className={classes.SingleOrder}>
 
                 <p
-                    style={{
-                        position: "relative",
-                        textDecoration: "underline",
-                        color: "blue", 
-                        right: "250px", 
-                        cursor: "pointer"
-
-
-                    }}
+                    className={classes.SingleOrderBack}
                     onClick={() => { this.props.history.goBack() }} >Back</p>
 
 

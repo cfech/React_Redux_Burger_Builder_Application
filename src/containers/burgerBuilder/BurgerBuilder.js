@@ -58,18 +58,27 @@ class BurgerBuilder extends Component {
 
     }
 
+    //for setting purchasing state to tue, or is the user is not logged in, setting the redirect path  after the user logs in, to store the current state of the burger. adn push them to the auth page
     purchaseHandler = () => {
-        this.setState({
-            purchasing: true
-        })
+        if (this.props.isLoggedIn) {
+            this.setState({
+                purchasing: true
+            })
+        } else {
+            this.props.onSetAuthRedirectPath("/checkout")
+            this.props.history.push("/auth")
+        }
+
     }
 
+    // for having the order summary modal go away  if you click cancel
     purchaseCancel = () => {
         this.setState({
             purchasing: false
         })
     }
 
+    //for when yo click continue in order summary modal
     purchaseContinueHandler = () => {
         this.props.onInitPurchase()
         this.props.history.push({
@@ -102,7 +111,7 @@ class BurgerBuilder extends Component {
                 <Aux>
                     <Burger ingredients={this.props.ing} />
                     <BuildControls
-
+                        isLoggedIn={this.props.isLoggedIn}
                         ingredientAdded={this.props.onIngredientAdded}
                         ingredientRemoved={this.props.onIngredientRemoved}
                         disabled={disabledInfo}
@@ -135,8 +144,9 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
     return ({
         ing: state.burgerBuilder.ingredients,
-        price: state.burgerBuilder.totalPrice, 
-        error : state.burgerBuilder.error
+        price: state.burgerBuilder.totalPrice,
+        error: state.burgerBuilder.error,
+        isLoggedIn: state.auth.token !== null
     })
 }
 const mapDispatchToProps = dispatch => {
@@ -147,18 +157,23 @@ const mapDispatchToProps = dispatch => {
         },
         onIngredientRemoved: (ingName) => {
             return dispatch(actionCreators.removeIngredient(ingName))
-        }, 
+        },
 
         //if want to use this function in .then of axios
         // onIngredientRetrieved: (ingredients) => {
         //     return dispatch({type: "SET_INGREDIENTS", ing: ingredients})
         // }
 
-        onIngredientRetrieved: () =>{
+        onIngredientRetrieved: () => {
             return dispatch(actionCreators.initIngredients())
         },
 
-        onInitPurchase: () => { dispatch(actionCreators.purchaseInit()) }
+        onInitPurchase: () => {
+            return dispatch(actionCreators.purchaseInit()) 
+        },
+        onSetAuthRedirectPath: (path) => {
+            return dispatch(actionCreators.setAuthRedirectPath(path))
+        }
 
 
     })

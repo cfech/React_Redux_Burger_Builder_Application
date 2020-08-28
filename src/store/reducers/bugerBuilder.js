@@ -10,7 +10,8 @@ import { updateObject } from "../utility"
 const initialState = {
     ingredients: null,
     totalPrice: 4,
-    error: false
+    error: false, 
+    building: false
 }
 
 const INGREDIENTPRICES = {
@@ -27,7 +28,8 @@ const addIngredient = (state, action) => {
             const updatedIngredients = updateObject(state.ingredients, updatedIngredient)
             const updatedState = {
                 ingredients: updatedIngredients,
-                totalPrice: state.totalPrice + INGREDIENTPRICES[action.ingredientName]
+                totalPrice: state.totalPrice + INGREDIENTPRICES[action.ingredientName], 
+                building: true
             }
             return updateObject(state, updatedState)
 }
@@ -37,7 +39,8 @@ const deleteIngredient = (state, action) => {
             const updatedIngs = updateObject(state.ingredients, updatedIng)
             const updatedSTate = {
                 ingredients: updatedIngs,
-                totalPrice: state.totalPrice - INGREDIENTPRICES[action.ingredientName]
+                totalPrice: state.totalPrice - INGREDIENTPRICES[action.ingredientName], 
+                building: true
             }
             return updateObject(state, updatedSTate)
 }
@@ -68,7 +71,8 @@ const reducer = (state = initialState, action) => {
             return updateObject(state, {
                 ingredients: action.ing,
                 error: false,
-                totalPrice: 4
+                totalPrice: 4, 
+                building: false
             })
 
         case actionTypes.FETCH_ING_FAILED:

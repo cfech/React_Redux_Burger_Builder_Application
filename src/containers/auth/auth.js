@@ -3,6 +3,7 @@ import Input from "../../components/UI/inputEl/inputEl"
 import Button from "../../components/UI/button/button"
 import classes from './auth.css'
 import Spinner from "../../components/UI/Spinner/spinner"
+import { Redirect } from "react-router-dom"
 
 
 //redux
@@ -46,6 +47,12 @@ class Auth extends Component {
         isSignUp: false
     }
 
+
+    componentDidMount(){
+        if(!this.props.buildingBurger && this.props.authRedirect !== "/" ){
+            this.props.onSetAuthRedirectPath()
+        }
+    }
 
     // to check if each form element is valid
     checkValidity(value, rules) {
@@ -209,8 +216,14 @@ class Auth extends Component {
             }
         }
 
+        let authRedirect = null
+        if (this.props.isLoggedIn) {
+            authRedirect = <Redirect to = {this.props.authRedirectPath} />
+        }
+
         return (
             <div className={classes.Auth}>
+                {authRedirect}
                 {errorMessage}
                 <form onSubmit={this.initAuth} >
                     {form}
@@ -230,13 +243,18 @@ const mapStateToProps = state => {
     return (
         {
             loading: state.auth.loading,
-            error: state.auth.error
+            error: state.auth.error,
+            isLoggedIn: state.auth.token !== null, 
+            buildingBurger: state.burgerBuilder.building, 
+            authRedirectPath: state.auth.authRedirectPath
+            
         })
 }
 
 const mapDispatchToProps = dispatch => {
     return ({
-        createUser: (user, isSignUp) => { dispatch(actionCreators.authInit(user, isSignUp)) }
+        createUser: (user, isSignUp) => { dispatch(actionCreators.authInit(user, isSignUp)) }, 
+        onSetAuthRedirectPath: () => {dispatch(actionCreators.setAuthRedirectPath("/"))}
     })
 }
 

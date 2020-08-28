@@ -1,0 +1,24 @@
+.SingleOrder{
+    width: 70%;
+    margin: 20px auto;
+    text-align: center;
+    border: 5px solid #ccc;
+    box-shadow: -10px 5px 5px #eee;
+    position: relative;
+    top: 200px;
+    padding: 20px
+}
+
+.SingleOrderBack{
+        position: relative;
+        text-decoration: underline;
+        color: blue; 
+        right: 250px; 
+        cursor: pointer
+}
+
+@media(max-width: 500px) {
+    .SingleOrderBack {
+        right: 90px;
+    }
+}

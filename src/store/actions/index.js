@@ -29,6 +29,11 @@ export{
 } from "./order"
 
 export{
+    //to sign up/sign in
     authInit, 
-    logout
+    logout, 
+    //for conditional redirect
+    setAuthRedirectPath, 
+    //to see if any users are store in local storage
+    authCheckState
 } from "./auth"
