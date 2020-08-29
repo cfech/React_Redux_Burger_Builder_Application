@@ -96,6 +96,21 @@ class ContactData extends Component {
                 valid: false,
                 touched: false
             },
+
+            selectDeliveryMethod: {
+                elementType: "inputReadOnly",
+                elementConfig: {
+                    type: "text",
+                    placeholder: "Select Your Delivery Method:",
+                },
+                value: "",
+                validation: {
+                    required: false
+                },
+                valid: true,
+                touched: false
+            },
+
             deliveryMethod: {
                 elementType: "select",
                 elementConfig: {

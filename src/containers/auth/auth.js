@@ -181,6 +181,19 @@ class Auth extends Component {
                 valid: false,
                 touched: false
             },
+            
+            selectDeliveryMethod: {
+                elementType: "inputReadOnly",
+                elementConfig: {
+                    type: "text",
+                    placeholder: "Select Your Delivery Method:",
+                },
+                value: "",
+                validation: {
+                },
+                valid: false,
+                touched: false
+            },
             deliveryMethod: {
                 elementType: "select",
                 elementConfig: {

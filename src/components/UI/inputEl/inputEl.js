@@ -27,6 +27,15 @@ const input = (props) => {
                 onChange={props.change}
             />
             break
+
+            case ("inputReadOnly"):
+            inputElement = <input className={inputClasses.join(' ')}
+                {...props.elementConfig}
+                value={props.value}
+                onChange={props.change}
+                readOnly
+            />
+            break
         case ("textarea"):
             inputElement = <textarea className={inputClasses.join(' ')}
                 {...props.elementConfig}
