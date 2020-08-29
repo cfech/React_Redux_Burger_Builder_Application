@@ -37,7 +37,9 @@ export const AUTH_FAILED= "AUTH_FAILED"
 export const AUTH_LOGOUT = "AUTH_LOGOUT"
 
 //for saving user info to database
-export const SAVED_USER_INFO = "SAVED_USER_INFO"
+export const SAVED_USER_INFO = "SAVED_USER_INFO_SUCCESS"
+export const SAVED_USER_INFO_START="SAVED_USER_INFO_START"
+export const SAVED_USER_INFO_FAILED="SAVED_USER_INFO_FAILED"
 
 //for getting userInfo to be displayed on userInfo page
 export const GET_USER_INFO_START = "GET_USER_INFO_START"

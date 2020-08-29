@@ -86,11 +86,78 @@ class Auth extends Component {
                 valid: false,
                 touched: false
             },
+            Address: {
+                elementType: "input",
+                elementConfig: {
+                    type: "text",
+                    placeholder: "Address",
+                },
+                value: "",
+                validation: {
+                    required: true,
+                },
+                valid: false,
+                touched: false
+            },
+            Town: {
+                elementType: "input",
+                elementConfig: {
+                    type: "text",
+                    placeholder: "Town/City",
+                },
+                value: "",
+                validation: {
+                    required: true,
+                },
+                valid: false,
+                touched: false
+            },
+            State: {
+                elementType: "input",
+                elementConfig: {
+                    type: "text",
+                    placeholder: "State",
+                },
+                value: "",
+                validation: {
+                    required: true,
+                },
+                valid: false,
+                touched: false
+            },
+            Country: {
+                elementType: "input",
+                elementConfig: {
+                    type: "text",
+                    placeholder: "Country",
+                },
+                value: "",
+                validation: {
+                    required: true,
+                },
+                valid: false,
+                touched: false
+            },
+            ZipCode: {
+                elementType: "input",
+                elementConfig: {
+                    type: "text",
+                    placeholder: "Zip Code",
+                },
+                value: "",
+                validation: {
+                    required: true,
+                    minLength: 5,
+                    maxLength: 5
+                },
+                valid: false,
+                touched: false
+            },
             password: {
                 elementType: "input",
                 elementConfig: {
                     type: "password",
-                    placeholder: "password",
+                    placeholder: "Password",
                 },
                 value: "",
                 validation: {
@@ -100,10 +167,36 @@ class Auth extends Component {
                 valid: false,
                 touched: false
             },
+            verifyPassword: {
+                elementType: "input",
+                elementConfig: {
+                    type: "password",
+                    placeholder: "Verify Your Password",
+                },
+                value: "",
+                validation: {
+                    required: true,
+                    minLength: 6
+                },
+                valid: false,
+                touched: false
+            },
+            deliveryMethod: {
+                elementType: "select",
+                elementConfig: {
+                    options: [
+                        { value: "Please Select Delivery Option", displayValue: "Please Select Delivery Option" },
+                        { value: "fastest", displayValue: "Fastest" },
+                        { value: "cheapest", displayValue: "Cheapest" }
+                    ],
+                },
+                validation: {},
+                value: "fastest",
+                valid: true
+            },
         },
-
-
-        isSignUp: false
+        isSignUp: false,
+        passwordsMatch: true
     }
 
 
@@ -152,6 +245,7 @@ class Auth extends Component {
         //update level 2 state value , ie: name.value 
         //check for validation
         //has the form been touched, to know when to apply validation styling
+
         let updatedControls = null
         if (this.state.isSignUp) {
             updatedControls = {
@@ -164,10 +258,21 @@ class Auth extends Component {
                 }
             }
 
+            //to check if passwords match
+            if (updatedControls.password.value !== updatedControls.verifyPassword.value) {
+                this.setState({
+                    passwordsMatch: false
+                })
+            } else {
+                this.setState({
+                    passwordsMatch: true
+                })
+            }
             //set the state of the form and validity 
             this.setState({
                 signUpControls: updatedControls
             })
+
         } else {
             updatedControls = {
                 ...this.state.controls,
@@ -183,10 +288,8 @@ class Auth extends Component {
                 controls: updatedControls
             })
         }
-
-
-
     }
+
 
     //to sign in/sign up someone based on this.state.isSignUp (url is swapped in the action creator)
     initAuth = (e) => {
@@ -202,12 +305,20 @@ class Auth extends Component {
                 firstName: this.state.signUpControls.firstName.value,
                 lastName: this.state.signUpControls.lastName.value,
                 email: this.state.signUpControls.email.value,
-                password: this.state.signUpControls.password.value
+                password: this.state.signUpControls.password.value,
+                address: this.state.signUpControls.Address.value,
+                town: this.state.signUpControls.Town.value,
+                state: this.state.signUpControls.State.value,
+                country: this.state.signUpControls.Country.value,
+                zipCode: this.state.signUpControls.ZipCode.value,
+                deliveryMethod: this.state.signUpControls.deliveryMethod.value
+
             }
         }
 
-        console.log(user)
-        this.props.createUser(user, this.state.isSignUp)
+        if (this.state.passwordsMatch){
+            this.props.createUser(user, this.state.isSignUp)
+        }
     }
 
     //to switch the state back and forth between sign in and sign up
@@ -223,6 +334,16 @@ class Auth extends Component {
 
 
     render() {
+        let passwordError = null
+
+        if (!this.state.passwordsMatch) {
+            passwordError = <div>
+                <p style={{
+                    color:"red",
+                    textDecoration: "underline"
+                }} >Please Confirm Your Passwords Match</p>
+            </div>
+        }
 
         //for turing form state into a mappable array
         const formElementArray = []
@@ -235,7 +356,7 @@ class Auth extends Component {
                     config: this.state.controls[k]
                 })
             }
-            console.log(formElementArray)
+            // console.log(formElementArray)
         } else {
             for (let k in this.state.signUpControls) {
                 formElementArray.push({
@@ -339,6 +460,7 @@ class Auth extends Component {
                 {authRedirect}
                 {errorMessage}
                 <form onSubmit={this.initAuth} >
+                    {passwordError}
                     {form}
                     <Button btnType="Success">{this.state.isSignUp ? "SIGN UP" : 'SIGN IN'}</Button>
                 </form>

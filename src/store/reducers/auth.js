@@ -10,7 +10,8 @@ const initialState = {
     error: null,
     loading: null,
     authRedirectPath: "/", 
-    loggedInUser: null
+    loggedInUser: null, 
+    singleAccountError: null
 }
 
 // for setting loading
@@ -46,9 +47,17 @@ const setAuthRedirectPath = (state, action) => {
 
 //for setting user data to be displayed in he userInfo page
 const setSingleUserInfo = (state, action) => {
-    return updateObject(state, {loggedInUser: action.userInfo})
+    return updateObject(state, {loggedInUser: action.userInfo, loading: false})
 }
 
+//for setting loading in get single user
+const getSingleUserStart = (state, action) => {
+    return updateObject(state, {loading: true})
+}
+
+const getSingleUserFailed = (state, action) => {
+    return updateObject(state, {loading: false, singleAccountError: action.error})
+}
 
 //leaned out reducer
 const reducer = (state = initialState, action) => {
@@ -64,7 +73,11 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SET_AUTH_REDIRECT_PATH:
             return setAuthRedirectPath(state, action)
         case actionTypes.GET_USER_INFO_SUCCESS:
-            return setSingleUserInfo(state, action)
+            return setSingleUserInfo(state, action) 
+        case actionTypes.GET_USER_INFO_START:
+            return getSingleUserStart(state, action)
+        case actionTypes.GET_USER_INFO_FAILED:
+            return getSingleUserFailed(state, action)
         default:
             return state
     }
