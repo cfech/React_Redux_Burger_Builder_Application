@@ -34,7 +34,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
 
         //used when a component is not required any more 
         componentWillUnmount() {
-            console.log("will unmont interceptors")
+            //console.log("will unmont interceptors")
             //this will remove interceptors when component unmounts: ie we switch to a different page
             axios.interceptors.request.eject(this.reqInterceptor)
             axios.interceptors.response.eject(this.resInterceptor)

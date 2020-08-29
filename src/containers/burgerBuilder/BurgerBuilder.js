@@ -26,7 +26,6 @@ class BurgerBuilder extends Component {
         purchasing: false,
     }
 
-
     //for retrieving info from firebase
 
     //example if you wan to just call a dispatch prop in the .then
@@ -45,7 +44,6 @@ class BurgerBuilder extends Component {
 
 
     updatePurchaseState(ingredients) {
-
         const sum = Object.keys(ingredients).map(igKey => {
             //returns the value for each key
             return ingredients[igKey]
@@ -55,7 +53,6 @@ class BurgerBuilder extends Component {
 
         //setting purchaseable to true or false, to adjust button state
         return sum > 0
-
     }
 
     //for setting purchasing state to tue, or is the user is not logged in, setting the redirect path  after the user logs in, to store the current state of the burger. adn push them to the auth page
@@ -86,9 +83,6 @@ class BurgerBuilder extends Component {
             pathname: "/checkout"
         })
     }
-
-
-
 
     render() {
 
@@ -178,8 +172,6 @@ const mapDispatchToProps = dispatch => {
         setPurchasedToFalse: () => {
             return dispatch(actionCreators.resetPurchasedState())
         }
-
-
     })
 }
 

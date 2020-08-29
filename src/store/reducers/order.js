@@ -20,15 +20,11 @@ const reducer = (state = initialState, action) => {
                 ...action.orderData,
                 id: action.id
             }
-
             return {
                 ...state,
                 loading: false,
-
-
-                //add the order to the orders array using concat, which returns a whole new array with the previous state and the new order addedon 
+                //add the order to the orders array using concat, which returns a whole new array with the previous state and the new order added on 
                 orders: state.orders.concat(newOrder),
-
                 purchased: true
             }
 
@@ -76,15 +72,13 @@ const reducer = (state = initialState, action) => {
 
         case actionTypes.GET_ORDER_SUCCESS:
             let newIngredients = []
-
+            //for transforming ingredients into an array
             for (let ingredientName in action.order.ingredients) {
                 newIngredients.push({
                     name: ingredientName,
                     amount: action.order.ingredients[ingredientName]
                 })
             }
-
-
             return {
                 ...state,
                 order: {

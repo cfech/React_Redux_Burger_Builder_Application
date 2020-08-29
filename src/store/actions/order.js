@@ -5,28 +5,26 @@ import axios from "../../axios_orders"
 //async function, dispatch made available with thunk middleware
 export const initiateOrder = (order, token) => {
     return dispatch => {
-        console.log(token)
+        // console.log(token)
         //just for setting loading to true
         dispatch(purchaseBurgerStart())
 
         //to post a burger to the server
         axios.post("/orders.json?auth=" + token, order)
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 dispatch(orderSuccess(response.data.name, order))
             }).catch(err => {
-                console.log(err)
+                // console.log(err)
                 dispatch(orderFailure(err))
             })
     }
 }
 
-
 // synchronous function
 export const orderSuccess = (id, orderData) => {
     return { type: actionTypes.ORDER_SUCCESS, id: id, orderData: orderData }
 }
-
 
 // synchronous function
 export const orderFailure = (err) => {
@@ -44,7 +42,6 @@ export const purchaseBurgerStart = () => {
 }
 
 // for redirecting after order is placed, special redux method, 
-
 export const purchaseInit = () => {
     return {
         type: actionTypes.PURCHASE_INIT
@@ -68,35 +65,32 @@ export const initFetchingOrders = (token, userId) => {
         dispatch(fetchOrderStart())
 
         //HOW WOULD YOU EVEN FIGURE OUT THIS SYNTAX???????????????///
-        const queryParams ='?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"'
+        const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"'
         axios.get(`/orders.json${queryParams}`)
             .then((response) => {
-                console.log("[orders action creator ]", response)
+                // console.log("[orders action creator ]", response)
                 //formating an object to an array
                 // const fetchedOrders = Object.entries(res.data)
                 // console.log("Orders -> componentDidMount -> fetchedOrders", fetchedOrders)
 
                 const fetchedOrders = []
 
+                //transforms the orders into an array
                 for (let key in response.data) {
-                    console.log(response.data[key])
+                    // console.log(response.data[key])
                     fetchedOrders.push({
                         ...response.data[key],
                         id: key
 
                     })
-                    console.log("Orders -> componentDidMount -> fetchedOrders", fetchedOrders)
                 }
-
-
                 dispatch(fetchOrdersSuccess(fetchedOrders))
             })
             .catch((err) => {
-                console.log("[orders action creator ]", err)
+                //console.log("[orders action creator ]", err)
                 dispatch(fetchOrdersFailed(err))
             })
     }
-
 }
 
 //synchronous action creator 
@@ -122,10 +116,7 @@ export const fetchOrderStart = () => {
     }
 }
 
-
-
 //---------------------------FOR DELETING_ORDERS ORDERS---------------------
-
 export const deleteOrderStart = (id, token, userId) => {
     return (dispatch, getState) => {
         dispatch(deleteOrderStarted())
@@ -136,12 +127,12 @@ export const deleteOrderStart = (id, token, userId) => {
         // console.log(id)
         axios.delete(`/orders/${id}.json?auth=` + token)
             .then((res) => {
-                console.log(res)
+               // console.log(res)
                 dispatch(deleteOrderSuccess())
                 dispatch(initFetchingOrders(token, userId))
             })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
                 dispatch(deleteOrderFailed())
                 dispatch(fetchOrdersFailed(err))
             })
@@ -164,15 +155,14 @@ export const deleteOrderFailed = () => {
 export const getOrder = (id, token) => {
     return (dispatch, getState) => {
         dispatch(getOrderStart())
-        console.log(id)
-        
+        // console.log(id)
+
         axios.get(`/orders/${id}.json?auth=` + token)
             .then(res => {
-                console.log("------------------")
-                console.log(res)
+                // console.log(res)
                 dispatch(getOrderSuccess(res.data))
             }).catch(err => {
-                console.log(err)
+                // console.log(err)
                 dispatch(getOrderFailed())
                 dispatch(fetchOrdersFailed(err))
             })
@@ -201,7 +191,7 @@ export const getOrderFailed = () => {
 
 // for setting purchased state to false to avoid unwanted redirect 
 export const resetPurchasedState = () => {
-    return{
+    return {
         type: actionTypes.SET_PURCHASED_TO_FALSE
     }
 }

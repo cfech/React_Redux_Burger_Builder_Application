@@ -15,35 +15,60 @@ export const authInit = (user, isSignUp) => {
         }
 
         //for signing up
-        let url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDyksb4UZ6Cac6c2InQlGJMknHV149eY2Q"
+        let url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + process.env.REACT_APP_FIREBASE_KEY
 
         //for signing in
         if (!isSignUp) {
-            url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDyksb4UZ6Cac6c2InQlGJMknHV149eY2Q"
+            url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + process.env.REACT_APP_FIREBASE_KEY
         }
         // console.log(authData)
         axios.post(url, authData)
             .then(res => {
-                // console.log(res)
+                console.log(res)
+
+                // for saving user data 
+                if (isSignUp) {
+                    dispatch(saveUserInfo(authData, res.data))
+                }
+
+
 
                 localStorage.setItem("token", res.data.idToken)
                 //will give us the current date + time that the token expires in
                 const expirationDate = new Date(new Date().getTime() + res.data.expiresIn * 1000)
-                console.log("authInit -> expirationDate", expirationDate)
                 localStorage.setItem("expirationDate", expirationDate)
                 localStorage.setItem("userId", res.data.localId)
                 dispatch(authSuccess(res.data))
                 dispatch(checkAuthTimeout(res.data.expiresIn))
-
             }).catch(err => {
-                // console.log(err)
-                // console.log(err.response)
+                console.log(err)
+                console.log(err.response)
                 dispatch(authFailed(err))
             })
     }
 }
 
+export const saveUserInfo = (userData, res) => {
+    console.log(userData)
+    console.log(res)
+    const userInfo = {
+        email: userData.email,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        userId: res.localId
+    }
 
+    axios.post("https://react-burger-builder-5a549.firebaseio.com/users.json", userInfo)
+        .then(res => {
+            console.log(res)
+        }).catch(err => {
+            console.log(err)
+        })
+
+    return {
+        type: actionTypes.SAVED_USER_INFO
+    }
+}
 
 
 //synchronous action creator for setting loading state
@@ -61,8 +86,6 @@ export const authSuccess = (authData) => {
     }
 }
 
-
-
 //synchronous action creator for passing along errors in a failed case
 export const authFailed = (err) => {
     return {
@@ -74,14 +97,11 @@ export const authFailed = (err) => {
 //to call a function to log out the user after 1 hr , or any expiration time
 export const checkAuthTimeout = (expires) => {
     return dispatch => {
-        console.log("expires",expires)
         setTimeout(() => {
             dispatch(logout())
         }, expires * 1000)
-
     }
 }
-
 
 //for logging user out 
 export const logout = () => {
@@ -91,7 +111,6 @@ export const logout = () => {
     return {
         type: actionTypes.AUTH_LOGOUT
     }
-
 }
 
 //for conditional redirection
@@ -112,13 +131,11 @@ export const authCheckState = () => {
             dispatch(logout())
         } else {
             const expirationTime = new Date(localStorage.getItem("expirationDate"))
-            console.log("authCheckState -> expirationTime", expirationTime)
+            // console.log("authCheckState -> expirationTime", expirationTime)
             if (expirationTime < new Date()) {
-                console.log("============")
                 dispatch(logout())
             } else {
                 const userId = localStorage.getItem("userId")
-
                 //----------COULD GET USER ID FROM GOOGLE WITH THIS AXIOS.POST REQUEST-----------
                 // const data ={ idToken: token}
                 // axios.post("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDyksb4UZ6Cac6c2InQlGJMknHV149eY2Q", data)
@@ -135,10 +152,39 @@ export const authCheckState = () => {
                 dispatch(authSuccess(authData))
 
                 //will log user out when this time hits, passing along something like 360000 milliseconds, or 1 hrs
-                console.log("+=======",expirationTime - new Date().getSeconds())
-                dispatch(checkAuthTimeout((expirationTime.getTime()  - new Date().getTime())/ 1000))
+                dispatch(checkAuthTimeout((expirationTime.getTime() - new Date().getTime()) / 1000))
             }
-
         }
+    }
+}
+
+//for getting user info
+export const getUserInfoInit = (id) => {
+    return dispatch => {
+        console.log(id)
+        const queryParams = '?orderBy="userId"&equalTo="' + id + '"'
+        console.log(queryParams)
+        axios.get("https://react-burger-builder-5a549.firebaseio.com/users.json" + queryParams)
+            .then(res => {
+                console.log(res.data)
+                let key = Object.keys(res.data)[0]
+                const usrData = res.data[key]
+                console.log("getUserInfoStart -> usrData", usrData)
+                dispatch(getUserInfo())
+                dispatch(setUserInfo(usrData))
+            }).catch(err => {
+                console.log(err)
+            })
+    }
+}
+
+export const getUserInfo = () => {
+    return { type: actionTypes.GET_USER_INFO_START }
+}
+
+export const setUserInfo = (userInfo) => {
+    return {
+        type: actionTypes.GET_USER_INFO_SUCCESS,
+        userInfo: userInfo
     }
 }

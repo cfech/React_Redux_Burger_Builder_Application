@@ -7,6 +7,7 @@ const navigationItems = (props) => (
         <NavItem link='/'> Burger Builder</NavItem>
         
         {props.isLoggedIn ? <NavItem link='/orders'> Orders</NavItem> : null }
+        {props.isLoggedIn ? <NavItem link='/userInfo'> My Account</NavItem> : null }
 
         {!props.isLoggedIn ? <NavItem link='/Auth'> Log In</NavItem> : <NavItem link='/logout'> Log out</NavItem>}
 

@@ -11,15 +11,12 @@ class Logout extends Component {
         this.props.onLogout()
     }
 
-
     render() {
         return (
             <Redirect to="/" />
         )
     }
 }
-
-
 
 const mapDispatchToProps = dispatch => {
     return {

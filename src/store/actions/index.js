@@ -1,42 +1,44 @@
-export{
+export {
     addIngredient,
     removeIngredient,
-     initIngredients, 
+    initIngredients,
 } from "./burgerBuilder"
 
-export{
+export {
     //sending orders
     purchaseBurgerStart,
-    initiateOrder, 
+    initiateOrder,
 
     //reset the prop that controls redirect when submitting a burger
-    purchaseInit, 
-
-
+    purchaseInit,
 
     //fetching orders
-    initFetchingOrders, 
+    initFetchingOrders,
+
     //loading prop
-    fetchOrderStart, 
+    fetchOrderStart,
 
-
-//deleting order
+    //deleting order
     deleteOrderStart,
 
     //getting 1 order
+    getOrder,
 
-    getOrder, 
-
-//to avoid unwanted redirect
+    //to avoid unwanted redirect
     resetPurchasedState
 } from "./order"
 
-export{
+export {
     //to sign up/sign in
-    authInit, 
-    logout, 
+    authInit,
+    logout,
+
     //for conditional redirect
-    setAuthRedirectPath, 
+    setAuthRedirectPath,
+    
     //to see if any users are store in local storage
-    authCheckState
+    authCheckState,
+
+    //for retrieving user info from database
+    getUserInfoInit
 } from "./auth"

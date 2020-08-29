@@ -6,7 +6,6 @@ import SideDrawer from "../../components/Navigation/sideDrawer/sideDrawer"
 
 import {connect} from "react-redux"
 class Layout extends Component {
-
     state = {
         showSideDrawer: false
     }
@@ -35,7 +34,6 @@ class Layout extends Component {
                     {this.props.children}
                 </main>
             </Aux>
-
         )
     }
 }

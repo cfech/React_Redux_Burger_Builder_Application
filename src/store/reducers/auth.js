@@ -1,17 +1,16 @@
 //data flow = click Button -> mapDispatchToProps -> actionTypes -> actionCreators ->  middleware(index.js) -> REDUCER, updates state -> component -> UI
 
-
 //reducer for authentication
 import * as actionTypes from "../actions/actionTypes"
-import { updateObject } from "../utility"
-
+import { updateObject } from "../../general/utility"
 
 const initialState = {
     token: null,
     userId: null,
     error: null,
     loading: null,
-    authRedirectPath: "/"
+    authRedirectPath: "/", 
+    loggedInUser: null
 }
 
 // for setting loading
@@ -32,7 +31,6 @@ const authSuccess = (state, action) => {
 
 //if we get an error we store the error
 const authFail = (state, action) => {
-    console.log(action)
     return updateObject(state, { error: action.error.response, loading: false })
 }
 
@@ -44,6 +42,11 @@ const authLogout = (state, action) => {
 //for conditional redirection
 const setAuthRedirectPath = (state, action) => {
     return updateObject(state, { authRedirectPath: action.path })
+}
+
+//for setting user data to be displayed in he userInfo page
+const setSingleUserInfo = (state, action) => {
+    return updateObject(state, {loggedInUser: action.userInfo})
 }
 
 
@@ -60,6 +63,8 @@ const reducer = (state = initialState, action) => {
             return authLogout(state, action)
         case actionTypes.SET_AUTH_REDIRECT_PATH:
             return setAuthRedirectPath(state, action)
+        case actionTypes.GET_USER_INFO_SUCCESS:
+            return setSingleUserInfo(state, action)
         default:
             return state
     }

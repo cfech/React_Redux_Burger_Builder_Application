@@ -10,6 +10,7 @@ import axios from "../../../axios_orders"
 import { connect } from "react-redux"
 import * as actionCreators from "../../../store/actions/index"
 
+import { updateObject, checkValidity } from "../../../general/utility"
 
 
 class ContactData extends Component {
@@ -115,79 +116,44 @@ class ContactData extends Component {
 
     orderHandler = (e) => {
         e.preventDefault()
-
         const formData = {}
-
-        // loop over the oderform state and make form data into an object with name: "Connor", street: "street" structure
+        // loop over the oder form state and make form data into an object with name: "Connor", street: "street" structure
         for (let formElementIdentifier in this.state.orderForm) {
             formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value
         }
-
 
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.price,
             orderData: formData,
-            timeStamp: new Date().getTime(), 
+            timeStamp: new Date().getTime(),
             userId: this.props.userId
         }
 
         const token = this.props.token
-
         this.props.initiateOrder(order, token)
-        //will send post request to baseUlr + /orders, need .json for firebase
-
     }
-
-
-    //checks validity of each specific field 
-    checkValidity(value, rules) {
-        let isValid = true
-        if (!rules) {
-            return true
-        }
-        if (rules.required) {
-            isValid = value.trim() !== "" && isValid
-        }
-
-        //chain && is valid to pass it through the if statement, to make sure it satisfies every condition
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid
-        }
-
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid
-        }
-        return isValid
-
-    }
-
-
 
     //for updating form state
     inputChangedHandler = (e, inputIdentifier) => {
 
+        //extract copy of level 2 of original state, ie, name, email etc..
+        const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
+            //update level 2 state value , ie: name.value 
+            value: e.target.value,
+
+            //for checking if input is valid , ie: not blank 
+            valid: checkValidity(e.target.value, this.state.orderForm[inputIdentifier].validation),
+
+            //has the form been touched, to know when to apply validation styling 
+            touched: true
+        })
+
         //make copy of original state, this is only level 1 tho 
-        const updatedOrderForm = {
-            ...this.state.orderForm
-        }
-
-        //extract copy of level 2 of orional state, ie, name, email etc..
-        const updatedFormElement = {
-            ...updatedOrderForm[inputIdentifier]
-        }
-
-        //update level 2 state value , ie: name.value 
-        updatedFormElement.value = e.target.value
-
-        //for checking if input is valid , ie: not blank 
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation)
-
-        //has the form been touched, to know when to apply validation styling 
-        updatedFormElement.touched = true
-
         //update the level 1 state to reflect the changes made in level 2 
-        updatedOrderForm[inputIdentifier] = updatedFormElement
+        const updatedOrderForm = updateObject(this.state.orderForm, {
+            [inputIdentifier]: updatedFormElement
+        })
 
         //for checking total form validation
         let isFormValid = true
@@ -202,12 +168,10 @@ class ContactData extends Component {
             orderForm: updatedOrderForm,
             formIsValid: isFormValid
         })
-
     }
 
     render() {
-
-        //for turing form state into a mapable array
+        //for turing form state into a mappable array
         const formElementArray = []
 
         //loop through the keys of the order form and push the objects to the array
@@ -254,14 +218,13 @@ class ContactData extends Component {
 
 }
 
-
 //data flow = CLICK BUTTON -> MAPDISPATCHTOPROPS -> actionTypes -> actionCreators ->  middleware(index.js) -> reducer, updates state -> COMPONENT -> UI
 const mapStateToProps = state => {
     return ({
         ingredients: state.burgerBuilder.ingredients,
         price: state.burgerBuilder.totalPrice,
-        loading: state.orders.loading, 
-        token: state.auth.token, 
+        loading: state.orders.loading,
+        token: state.auth.token,
         userId: state.auth.userId
     })
 }
@@ -270,7 +233,6 @@ const mapDispatchToProps = dispatch => {
     return {
         initiateOrder: (order, token) => dispatch(actionCreators.initiateOrder(order, token))
     }
-
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios))

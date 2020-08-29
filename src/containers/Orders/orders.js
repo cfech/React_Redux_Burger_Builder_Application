@@ -3,25 +3,19 @@ import Order from "../../components/order/order/order"
 import axios from '../../axios_orders'
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler"
 import Spinner from "../../components/UI/Spinner/spinner"
-import { Link } from "react-router-dom"
-
+import { Link, withRouter } from "react-router-dom"
 
 //-------------------------------------------for redux--------------------------------
 import * as actionCreators from "../../store/actions/index"
 import { connect } from "react-redux"
 
-
-
 class Orders extends Component {
-
     //get the orders in the data base
     componentDidMount() {
         this.props.onInitiateOrderFetching(this.props.token, this.props.userId)
     }
 
-
     render() {
-
         const advancePage = (id) => {
             this.props.history.push({
                 pathname: this.props.match.url + "/" + id
@@ -78,26 +72,20 @@ class Orders extends Component {
         return (
             <div>
                 {orderMessage}
-
                 {this.props.loading ? <Spinner></Spinner> : this.props.orders.map(order => (
                     <Order key={order.id} clicked={() => advancePage(order.id)} delete={() => this.props.onDelete(order.id, this.props.token, this.props.userId)} ingredients={order.ingredients} price={order.price} />
                 ))}
-
-
             </div>
         )
     }
-
 }
 
 //data flow = CLICK BUTTON -> MAPDISPATCHTOPROPS -> actionTypes -> actionCreators ->  middleware(index.js) -> reducer, updates state -> COMPONENT -> UI
-
-
 const mapStateToProps = (state) => {
     return {
         orders: state.orders.orders,
         loading: state.orders.loading,
-        token: state.auth.token, 
+        token: state.auth.token,
         userId: state.auth.userId
     }
 }
@@ -114,4 +102,5 @@ const mapDispatchToProps = dispatch => {
 }
 
 //-------------connect (state, ----------dispatch)----------(callback parameters)
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Orders, axios))
+//with Router for lazy loading
+export default withRouter( connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Orders, axios)))

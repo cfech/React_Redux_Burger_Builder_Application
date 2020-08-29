@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-
 import { connect } from "react-redux"
+import {withRouter} from "react-router-dom"
 import * as actionCreators from "../../../store/actions/index"
-
 import Spinner from "../../UI/Spinner/spinner"
-
 import classes from './os.css'
 
 
@@ -84,5 +82,5 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(orderSummary)
+//with router for lazy loading
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(orderSummary))

@@ -44,12 +44,71 @@ class Auth extends Component {
                 touched: false
             },
         },
+
+        signUpControls: {
+            firstName: {
+                elementType: "input",
+                elementConfig: {
+                    type: "text",
+                    placeholder: "First Name",
+                },
+                value: "",
+                validation: {
+                    required: true
+                },
+                valid: false,
+                touched: false
+            },
+            lastName: {
+                elementType: "input",
+                elementConfig: {
+                    type: "text",
+                    placeholder: "Last Name",
+                },
+                value: "",
+                validation: {
+                    required: true
+                },
+                valid: false,
+                touched: false
+            },
+            email: {
+                elementType: "input",
+                elementConfig: {
+                    type: "email",
+                    placeholder: "Email",
+                },
+                value: "",
+                validation: {
+                    required: true,
+                    isEmail: true
+                },
+                valid: false,
+                touched: false
+            },
+            password: {
+                elementType: "input",
+                elementConfig: {
+                    type: "password",
+                    placeholder: "password",
+                },
+                value: "",
+                validation: {
+                    required: true,
+                    minLength: 6
+                },
+                valid: false,
+                touched: false
+            },
+        },
+
+
         isSignUp: false
     }
 
 
-    componentDidMount(){
-        if(!this.props.buildingBurger && this.props.authRedirect !== "/" ){
+    componentDidMount() {
+        if (!this.props.buildingBurger && this.props.authRedirect !== "/") {
             this.props.onSetAuthRedirectPath()
         }
     }
@@ -93,31 +152,61 @@ class Auth extends Component {
         //update level 2 state value , ie: name.value 
         //check for validation
         //has the form been touched, to know when to apply validation styling
-
-        const updatedControls = {
-            ...this.state.controls,
-            [controlName]: {
-                ...this.state.controls[controlName],
-                value: e.target.value,
-                valid: this.checkValidity(e.target.value, this.state.controls[controlName].validation),
-                touched: true
+        let updatedControls = null
+        if (this.state.isSignUp) {
+            updatedControls = {
+                ...this.state.signUpControls,
+                [controlName]: {
+                    ...this.state.signUpControls[controlName],
+                    value: e.target.value,
+                    valid: this.checkValidity(e.target.value, this.state.signUpControls[controlName].validation),
+                    touched: true
+                }
             }
+
+            //set the state of the form and validity 
+            this.setState({
+                signUpControls: updatedControls
+            })
+        } else {
+            updatedControls = {
+                ...this.state.controls,
+                [controlName]: {
+                    ...this.state.controls[controlName],
+                    value: e.target.value,
+                    valid: this.checkValidity(e.target.value, this.state.controls[controlName].validation),
+                    touched: true
+                }
+            }
+            //set the state of the form and validity 
+            this.setState({
+                controls: updatedControls
+            })
         }
 
-        //set the state of the form and validity 
-        this.setState({
-            controls: updatedControls
-        })
+
+
     }
 
     //to sign in/sign up someone based on this.state.isSignUp (url is swapped in the action creator)
     initAuth = (e) => {
         e.preventDefault()
-        const user = {
-            email: this.state.controls.email.value,
-            password: this.state.controls.password.value
+        let user = null
+        if (!this.state.isSignUp) {
+            user = {
+                email: this.state.controls.email.value,
+                password: this.state.controls.password.value
+            }
+        } else {
+            user = {
+                firstName: this.state.signUpControls.firstName.value,
+                lastName: this.state.signUpControls.lastName.value,
+                email: this.state.signUpControls.email.value,
+                password: this.state.signUpControls.password.value
+            }
         }
 
+        console.log(user)
         this.props.createUser(user, this.state.isSignUp)
     }
 
@@ -139,15 +228,25 @@ class Auth extends Component {
         const formElementArray = []
 
         //loop through the keys of the order form and push the objects to the array
-        for (let k in this.state.controls) {
-            formElementArray.push({
-                id: k,
-                config: this.state.controls[k]
-            })
+        if (!this.state.isSignUp) {
+            for (let k in this.state.controls) {
+                formElementArray.push({
+                    id: k,
+                    config: this.state.controls[k]
+                })
+            }
+            console.log(formElementArray)
+        } else {
+            for (let k in this.state.signUpControls) {
+                formElementArray.push({
+                    id: k,
+                    config: this.state.signUpControls[k]
+                })
+            }
+            //to render the form elements 
         }
 
 
-        //to render the form elements 
         let form = formElementArray.map(formElement => (
             <Input key={formElement.id}
                 elementType={formElement.config.elementType}
@@ -161,10 +260,15 @@ class Auth extends Component {
 
         ))
 
+
+
         //to handle loading case
         if (this.props.loading) {
             form = <Spinner></Spinner>
         }
+
+
+
 
         let errorMessage = null
 
@@ -211,14 +315,23 @@ class Auth extends Component {
                     color: "#6f7c80",
                     fontSize: "15px",
                     textDecoration: "underline"
-                }}>This account has been disabledt</p>
+                }}>This account has been disabled</p>
+
+            }
+
+            if (this.props.error.data.error.message === "MISSING_PASSWORD") {
+                errorMessage = <p style={{
+                    color: "#6f7c80",
+                    fontSize: "15px",
+                    textDecoration: "underline"
+                }}>Please enter a password</p>
 
             }
         }
 
         let authRedirect = null
         if (this.props.isLoggedIn) {
-            authRedirect = <Redirect to = {this.props.authRedirectPath} />
+            authRedirect = <Redirect to={this.props.authRedirectPath} />
         }
 
         return (
@@ -244,17 +357,17 @@ const mapStateToProps = state => {
         {
             loading: state.auth.loading,
             error: state.auth.error,
-            isLoggedIn: state.auth.token !== null, 
-            buildingBurger: state.burgerBuilder.building, 
+            isLoggedIn: state.auth.token !== null,
+            buildingBurger: state.burgerBuilder.building,
             authRedirectPath: state.auth.authRedirectPath
-            
+
         })
 }
 
 const mapDispatchToProps = dispatch => {
     return ({
-        createUser: (user, isSignUp) => { dispatch(actionCreators.authInit(user, isSignUp)) }, 
-        onSetAuthRedirectPath: () => {dispatch(actionCreators.setAuthRedirectPath("/"))}
+        createUser: (user, isSignUp) => { dispatch(actionCreators.authInit(user, isSignUp)) },
+        onSetAuthRedirectPath: () => { dispatch(actionCreators.setAuthRedirectPath("/")) }
     })
 }
 

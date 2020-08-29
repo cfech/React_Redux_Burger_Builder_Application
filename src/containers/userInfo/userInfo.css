@@ -1,0 +1,8 @@
+.User{
+    box-sizing: border-box;
+    width: 60%;
+    margin: 40px auto;
+    border: 5px solid #cccccc;
+    box-shadow: -10px 5px 5px #eee;
+    padding: 20px;
+}

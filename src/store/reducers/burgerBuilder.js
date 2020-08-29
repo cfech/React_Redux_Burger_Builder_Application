@@ -4,7 +4,7 @@ import * as actionTypes from "../actions/actionTypes"
 //reducer for burger builder
 
 //THIS REDUCER IS THE LEANED OUT EXAMPLE , USING UTILITY FUNCTIONS AND EXTRACTED LOGIC
-import { updateObject } from "../utility"
+import { updateObject } from "../../general/utility"
 
 
 const initialState = {
@@ -80,9 +80,6 @@ const reducer = (state = initialState, action) => {
         default:
             return state
     }
-
-
-
 }
 
 export default reducer

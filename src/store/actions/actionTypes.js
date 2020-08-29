@@ -1,6 +1,6 @@
 //data flow = click Button -> mapDispatchToProps -> ACTIONTYPES -> actionCreators ->  middleware(index.js) -> reducer, updates state -> component -> UI
 
-//for ingredent minipulation -- burgerBuilder Reducer
+//for ingredient manipulation -- burgerBuilder Reducer
 export const ADD_INGREDIENT = "ADD_INGREDIENT"
 export const REMOVE_INGREDIENT = "REMOVE_INGREDIENT"
 export const SET_INGREDIENTS = "SET_INGREDIENTS"
@@ -36,9 +36,16 @@ export const AUTH_FAILED= "AUTH_FAILED"
 
 export const AUTH_LOGOUT = "AUTH_LOGOUT"
 
+//for saving user info to database
+export const SAVED_USER_INFO = "SAVED_USER_INFO"
+
+//for getting userInfo to be displayed on userInfo page
+export const GET_USER_INFO_START = "GET_USER_INFO_START"
+export const GET_USER_INFO_SUCCESS= "GET_USER_INFO_SUCCESS"
+export const GET_USER_INFO_FAILED ="GET_USER_INFO_FAILED"
+
 //for conditional redirection
 export const SET_AUTH_REDIRECT_PATH = "SET_AUTH_REDIRECT_PATH "
 
-//purchase false
-
+//purchased state false
 export const SET_PURCHASED_TO_FALSE ="SET_PURCHASED_TO_FALSE"

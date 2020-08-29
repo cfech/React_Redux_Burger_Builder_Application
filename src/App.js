@@ -1,27 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import Layout from "./hoc/Layout/layout"
 import BurgerBuilder from "./containers/burgerBuilder/BurgerBuilder"
-import Checkout from "./containers/checkout/checkout"
 import { Route, Switch, withRouter } from "react-router-dom"
-import Orders from "./containers/Orders/orders"
-import OrderSummary from "./components/order/orderSummary/os"
 import Auth from "./containers/auth/auth"
 import Logout from "./containers/auth/logout/logout"
+import Spinner from "./components/UI/Spinner/spinner"
+
+
 
 //for redux
 import { connect } from "react-redux"
 import * as actionCreators from './store/actions/index'
 
 
+// lazy loading components
+const Orders = React.lazy(() => import("./containers/Orders/orders"))
+const OrderSummary = React.lazy(() => import("./components/order/orderSummary/os"))
+const Checkout = React.lazy(() => (import("./containers/checkout/checkout")))
+
+const UserInfo = React.lazy(() => import("./containers/userInfo/userInfo"))
+
 class App extends Component {
   componentDidMount() {
     this.props.checkUser()
   }
-
-
-
   render() {
-
     //route guard for users that are not logged in
     let routes = (
       <Switch>
@@ -29,19 +32,26 @@ class App extends Component {
         <Route exact path="/" component={BurgerBuilder} />
         <Route component={BurgerBuilder} />
       </Switch>
-
     )
 
     //routes for users that are logged in
     if (this.props.isLoggedIn) {
       routes = (
         <Switch>
-
-          <Route path="/checkout" component={Checkout} />
           <Route path="/auth" component={Auth} />
-          <Route path="/orders/:id" exact component={OrderSummary} />
-          <Route path="/orders" component={Orders} />
+          <Route path="/checkout" render={() => <Suspense
+            fallback={<Spinner/>}
+          > <Checkout /> </Suspense>} />
+          <Route path="/orders/:id" render={() => <Suspense
+            fallback={<Spinner/>}
+          > <OrderSummary /> </Suspense>} />
+          <Route path="/orders" render={() => <Suspense
+            fallback={<Spinner/>}
+          > <Orders /> </Suspense>} />
           <Route path="/logout" component={Logout} />
+          <Route path="/userInfo" render={() => <Suspense
+            fallback={<Spinner/>}
+          > <UserInfo /> </Suspense>} />
           <Route exact path="/" component={BurgerBuilder} />
           <Route component={BurgerBuilder} />
         </Switch>
@@ -54,7 +64,6 @@ class App extends Component {
           {routes}
         </Layout>
       </div>
-
     );
   }
 }
