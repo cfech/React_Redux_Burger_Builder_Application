@@ -139,48 +139,48 @@ export const authCheckState = () => {
 export const saveUserInfo = (userData, res) => {
     return dispatch => {
         dispatch(saveSingleUserStart())
-    console.log(userData)
-    console.log(res)
-    const userInfo = {
-        email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        userId: res.localId,
-        address: userData.address,
-        town: userData.town,
-        state: userData.state,
-        zipCode: userData.zipCode,
-        country: userData.country,
-        deliveryMethod: userData.deliveryMethod
-    }
+        console.log(userData)
+        console.log(res)
+        const userInfo = {
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            userId: res.localId,
+            address: userData.address,
+            town: userData.town,
+            state: userData.state,
+            zipCode: userData.zipCode,
+            country: userData.country,
+            deliveryMethod: userData.deliveryMethod
+        }
 
-    axios.post("https://react-burger-builder-5a549.firebaseio.com/users.json", userInfo)
-        .then(res => {
-            console.log(res)
-            dispatch(saveSingleUserSuccess())
-        }).catch(err => {
-            console.log(err)
-            dispatch(saveSingleUserFailed())
-        })
+        axios.post("https://react-burger-builder-5a549.firebaseio.com/users.json", userInfo)
+            .then(res => {
+                console.log(res)
+                dispatch(saveSingleUserSuccess())
+            }).catch(err => {
+                console.log(err)
+                dispatch(saveSingleUserFailed())
+            })
     }
 }
 
 export const saveSingleUserStart = () => {
-    return{type: actionTypes.SAVED_USER_INFO_START}
+    return { type: actionTypes.SAVED_USER_INFO_START }
 }
 
-export const saveSingleUserSuccess= () => {
-    return{type: actionTypes.SAVED_USER_INFO}
+export const saveSingleUserSuccess = () => {
+    return { type: actionTypes.SAVED_USER_INFO }
 }
 
-export const saveSingleUserFailed= () => {
-    return{type: actionTypes.SAVED_USER_INFO_FAILED}
+export const saveSingleUserFailed = () => {
+    return { type: actionTypes.SAVED_USER_INFO_FAILED }
 }
 
 
 //for getting user info
 export const getUserInfoInit = (id) => {
-    return dispatch => { 
+    return dispatch => {
         dispatch(getUserInfo())
         console.log(id)
         const queryParams = '?orderBy="userId"&equalTo="' + id + '"'
@@ -189,9 +189,10 @@ export const getUserInfoInit = (id) => {
             .then(res => {
                 console.log(res.data)
                 let key = Object.keys(res.data)[0]
-                const usrData = res.data[key]
+                console.log(key)
+                const usrData = { ...res.data[key], dataBaseId: key }
                 console.log("getUserInfoStart -> usrData", usrData)
-               
+
                 dispatch(setUserInfo(usrData))
             }).catch(err => {
                 console.log(err)
@@ -212,5 +213,5 @@ export const setUserInfo = (userInfo) => {
 }
 
 export const getUserInfoFailed = (err) => {
-    return{type: actionTypes.GET_USER_INFO_FAILED, error: err}
+    return { type: actionTypes.GET_USER_INFO_FAILED, error: err }
 }

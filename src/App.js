@@ -40,17 +40,17 @@ class App extends Component {
         <Switch>
           <Route path="/auth" component={Auth} />
           <Route path="/checkout" render={() => <Suspense
-            fallback={<Spinner/>}
+            fallback={<Spinner />}
           > <Checkout /> </Suspense>} />
           <Route path="/orders/:id" render={() => <Suspense
-            fallback={<Spinner/>}
+            fallback={<Spinner />}
           > <OrderSummary /> </Suspense>} />
           <Route path="/orders" render={() => <Suspense
-            fallback={<Spinner/>}
+            fallback={<Spinner />}
           > <Orders /> </Suspense>} />
           <Route path="/logout" component={Logout} />
           <Route path="/userInfo" render={() => <Suspense
-            fallback={<Spinner/>}
+            fallback={<Spinner />}
           > <UserInfo /> </Suspense>} />
           <Route exact path="/" component={BurgerBuilder} />
           <Route component={BurgerBuilder} />
