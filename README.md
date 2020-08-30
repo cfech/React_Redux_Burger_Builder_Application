@@ -1,6 +1,13 @@
 ## BURGER BUILDER 
 It is hosted byb firebase and can be accessed at https://react-burger-builder-5a549.web.app/
 
+Demo Login
+email: test@test.com
+password: testing
+
+
+
+
 This is a course project for "React - The Complete Guide (incl Hooks, React Router, Redux)" by Maximilian Schwarzmüller (he is really good!) on udemy. link: https://www.udemy.com/course/react-the-complete-guide-incl-redux/
 
 
