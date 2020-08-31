@@ -21,7 +21,7 @@ describe("auth reducer", () => {
     })
 
     //this test shows the reducer with actionType auth success can take the info given by the action type and payload, and set the state accordingly
-    it("should store toke and userId upon login", () =>{
+    it("should store token and userId upon login", () =>{
         expect(reducer(
             //beginning state
             {
@@ -31,7 +31,7 @@ describe("auth reducer", () => {
             loading: null,
             authRedirectPath: "/",
             loggedInUser: null,
-            singleAccountError: null
+            singleAccountError: true
         }, 
 
         //action and payload
@@ -49,7 +49,7 @@ describe("auth reducer", () => {
             loading: false,
             authRedirectPath: "/",
             loggedInUser: null,
-            singleAccountError: null
+            singleAccountError: true
         })
     })
 

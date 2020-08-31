@@ -186,7 +186,7 @@ class Auth extends Component {
                 elementType: "inputReadOnly",
                 elementConfig: {
                     type: "text",
-                    placeholder: "Select Your Delivery Method:",
+                    placeholder: "Select Your Preferred Delivery Method:",
                 },
                 value: "",
                 validation: {

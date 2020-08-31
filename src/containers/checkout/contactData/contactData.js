@@ -125,8 +125,12 @@ class ContactData extends Component {
                 valid: true
             },
         },
-        formIsValid: false
+        formIsValid: false,
 
+    }
+
+    componentDidMount() {
+        this.props.loadUser(this.props.userId)
     }
 
     orderHandler = (e) => {
@@ -145,6 +149,7 @@ class ContactData extends Component {
             userId: this.props.userId
         }
 
+        console.log(order)
         const token = this.props.token
         this.props.initiateOrder(order, token)
     }
@@ -185,6 +190,8 @@ class ContactData extends Component {
         })
     }
 
+
+
     render() {
         //for turing form state into a mappable array
         const formElementArray = []
@@ -223,10 +230,253 @@ class ContactData extends Component {
             form = <Spinner />
         }
 
+        const insertInfo = (e) => {
+            console.log("changed")
+            console.log(e.target)
+            //set the state of the form to the saved user info if the checkbox is checked
+            if (document.getElementById('checkBox').checked) {
+                this.setState({
+                    orderForm: {
+                        name: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "Name",
+                            },
+                            value: this.props.loggedInUser.firstName + " " + this.props.loggedInUser.lastName,
+                            validation: {
+                                required: true
+                            },
+                            valid: true,
+                            touched: false
+                        },
+                        state: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "State",
+                            },
+                            value: this.props.loggedInUser.state,
+                            validation: {
+                                required: true
+                            },
+                            valid: true,
+                            touched: false
+                        },
+                        street: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "Street",
+                            },
+                            value: this.props.loggedInUser.address + "," + this.props.loggedInUser.town,
+                            validation: {
+                                required: true
+                            },
+                            valid: true,
+                            touched: false
+                        },
+                        zipCode: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "Zip",
+                            },
+                            value: this.props.loggedInUser.zipCode,
+                            validation: {
+                                required: true,
+                                minLength: 5,
+                                maxLength: 5
+                            },
+                            valid: true,
+                            touched: false
+                        },
+                        country: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "Country",
+                            },
+                            value: this.props.loggedInUser.country,
+                            validation: {
+                                required: true
+                            },
+                            valid: true,
+                            touched: false
+                        },
+                        email: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "email",
+                                placeholder: "Email",
+                            },
+                            value: this.props.loggedInUser.email,
+                            validation: {
+                                required: true
+                            },
+                            valid: true,
+                            touched: false
+                        },
+
+                        selectDeliveryMethod: {
+                            elementType: "inputReadOnly",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "Select Your Delivery Method:",
+                            },
+                            value: "",
+                            validation: {
+                                required: false
+                            },
+                            valid: true,
+                            touched: false
+                        },
+
+                        deliveryMethod: {
+                            elementType: "select",
+                            elementConfig: {
+                                options: [
+                                    { value: "Please Select Delivery Option", displayValue: "Please Select Delivery Option" },
+                                    { value: "fastest", displayValue: "Fastest" },
+                                    { value: "cheapest", displayValue: "Cheapest" }
+                                ],
+                            },
+                            validation: {},
+                            value: this.props.loggedInUser.deliveryMethod,
+                            valid: true
+                        },
+                    },
+                    formIsValid: true,
+                })
+
+            } else {
+                console.log("not ")
+
+                //set the form back to the original state if the box is unchecked
+                this.setState({
+                    orderForm: {
+                        name: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "Name",
+                            },
+                            value: "",
+                            validation: {
+                                required: true
+                            },
+                            valid: false,
+                            touched: false
+                        },
+                        state: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "State",
+                            },
+                            value: "",
+                            validation: {
+                                required: true
+                            },
+                            valid: false,
+                            touched: false
+                        },
+                        street: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "Street",
+                            },
+                            value: "",
+                            validation: {
+                                required: true
+                            },
+                            valid: false,
+                            touched: false
+                        },
+                        zipCode: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "Zip",
+                            },
+                            value: "",
+                            validation: {
+                                required: true,
+                                minLength: 5,
+                                maxLength: 5
+                            },
+                            valid: false,
+                            touched: false
+                        },
+                        country: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "Country",
+                            },
+                            value: "",
+                            validation: {
+                                required: true
+                            },
+                            valid: false,
+                            touched: false
+                        },
+                        email: {
+                            elementType: "input",
+                            elementConfig: {
+                                type: "email",
+                                placeholder: "Email",
+                            },
+                            value: "",
+                            validation: {
+                                required: true
+                            },
+                            valid: false,
+                            touched: false
+                        },
+            
+                        selectDeliveryMethod: {
+                            elementType: "inputReadOnly",
+                            elementConfig: {
+                                type: "text",
+                                placeholder: "Select Your Delivery Method:",
+                            },
+                            value: "",
+                            validation: {
+                                required: false
+                            },
+                            valid: true,
+                            touched: false
+                        },
+            
+                        deliveryMethod: {
+                            elementType: "select",
+                            elementConfig: {
+                                options: [
+                                    { value: "Please Select Delivery Option", displayValue: "Please Select Delivery Option" },
+                                    { value: "fastest", displayValue: "Fastest" },
+                                    { value: "cheapest", displayValue: "Cheapest" }
+                                ],
+                            },
+                            validation: {},
+                            value: "fastest",
+                            valid: true
+                        },
+                    },
+                    formIsValid: false,
+                })
+            }
+        }
+
+        let checkBox = <input type="checkbox" id="checkBox" onChange={insertInfo} />
+
         return (
             <div className={classes.ContactData}>
                 <h4>Enter Your Contact Info</h4>
+               {this.props.loggedInUser ?<div>Check if you want use stored account information {checkBox} </div>: null}
                 {form}
+                
             </div>
         )
     }
@@ -240,13 +490,15 @@ const mapStateToProps = state => {
         price: state.burgerBuilder.totalPrice,
         loading: state.orders.loading,
         token: state.auth.token,
-        userId: state.auth.userId
+        userId: state.auth.userId,
+        loggedInUser: state.auth.loggedInUser
     })
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        initiateOrder: (order, token) => dispatch(actionCreators.initiateOrder(order, token))
+        initiateOrder: (order, token) => dispatch(actionCreators.initiateOrder(order, token)),
+        loadUser: (id) => dispatch(actionCreators.getUserInfoInit(id))
     }
 }
 

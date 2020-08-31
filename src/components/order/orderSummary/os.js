@@ -27,7 +27,7 @@ class orderSummary extends Component {
                     onClick={() => { this.props.history.goBack() }} >Back</p>
 
 
-                <h2>{this.props.order.orderData.name} Order Is:</h2>
+                <h2>{this.props.order.orderData.name}'s Order Is:</h2>
 
 
                 <p>
