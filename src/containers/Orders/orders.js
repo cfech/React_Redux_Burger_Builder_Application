@@ -4,6 +4,7 @@ import axios from '../../axios_orders'
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler"
 import Spinner from "../../components/UI/Spinner/spinner"
 import { Link, withRouter } from "react-router-dom"
+import classes from './orders.css'
 
 //-------------------------------------------for redux--------------------------------
 import * as actionCreators from "../../store/actions/index"
@@ -72,9 +73,12 @@ class Orders extends Component {
         return (
             <div>
                 {orderMessage}
-                {this.props.loading ? <Spinner></Spinner> : this.props.orders.map(order => (
-                    <Order key={order.id} clicked={() => advancePage(order.id)} delete={() => this.props.onDelete(order.id, this.props.token, this.props.userId)} ingredients={order.ingredients} price={order.price} />
-                ))}
+                { this.props.orders.length !==0 ?
+                    <h3 className={classes.BuildAnother} onClick={() => { this.props.history.push("/") }}>Builder Another Burger?</h3>: null}
+                {this.props.loading ? <Spinner></Spinner> :
+                    this.props.orders.slice(0).reverse().map(order => (
+                        <Order key={order.id} clicked={() => advancePage(order.id)} delete={() => this.props.onDelete(order.id, this.props.token, this.props.userId)} ingredients={order.ingredients} price={order.price} />
+                    ))}
             </div>
         )
     }
@@ -103,4 +107,4 @@ const mapDispatchToProps = dispatch => {
 
 //-------------connect (state, ----------dispatch)----------(callback parameters)
 //with Router for lazy loading
-export default withRouter( connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Orders, axios)))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Orders, axios)))
