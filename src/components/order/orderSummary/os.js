@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom"
 import * as actionCreators from "../../../store/actions/index"
 import Spinner from "../../UI/Spinner/spinner"
 import classes from './os.css'
-
+import Burger from "../../Burger/burger"
 
 class orderSummary extends Component {
     state = {
@@ -61,6 +61,7 @@ class orderSummary extends Component {
         }
         return (
             <div>
+                {/* {this.props.order ? <Burger ings = {this.props.order.ing} ingredients ={false} /> : null} */}
                 {output}
             </div>
         )

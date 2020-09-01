@@ -44,7 +44,7 @@ class UserInfo extends Component {
                             })
                         }} >Edit User Info</p> */}
                         <p className={classes.EditP} onClick={advanceUpdate} >Edit User Info</p>
-                        <p className={classes.EditP} onClick={() => {this.props.resetPassword(this.props.token)}} >Change Password</p>
+                        {/* <p className={classes.EditP} onClick={() => {this.props.resetPassword(this.props.token)}} >Change Password</p> */}
                     </div>
 
                     <div className={classes.UserData}>

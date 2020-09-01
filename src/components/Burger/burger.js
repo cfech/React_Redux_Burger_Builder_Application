@@ -5,8 +5,10 @@ import BurgerIngredient from "./BurgerIngredient/BurgerIngredient"
 import {withRouter} from "react-router-dom"
 
 const burger = (props) => {
-    //object keys converts the keys of an object ot an array, converts this object too an array of ingredients
-    let transformedIngredients = Object.keys(props.ingredients)
+    let transformedIngredients = []
+    
+    if(props.ingredients){
+        transformedIngredients = Object.keys(props.ingredients)
         .map(igKey => {
             return[...Array(props.ingredients[igKey])].map((_, i) => {
                 return <BurgerIngredient key={igKey + i} type={igKey}/>
@@ -15,6 +17,17 @@ const burger = (props) => {
         .reduce((arr, el) => {
             return arr.concat(el)
         }, []);
+    }
+    //object keys converts the keys of an object ot an array, converts this object too an array of ingredients
+    
+
+    //for rendering on order summary page
+        // if(props.ings){
+        //    transformedIngredients = props.ings.map(ing =>{
+        //         console.log(ing)
+        //         return <BurgerIngredient key={ing.name} type={ing.name}/>
+        //     })
+        // }
 
         //console.log(transformedIngredients)
         if(transformedIngredients.length === 0){
