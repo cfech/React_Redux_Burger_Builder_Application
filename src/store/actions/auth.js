@@ -139,8 +139,8 @@ export const authCheckState = () => {
 export const saveUserInfo = (userData, res) => {
     return dispatch => {
         dispatch(saveSingleUserStart())
-        console.log(userData)
-        console.log(res)
+        // console.log(userData)
+        // console.log(res)
         const userInfo = {
             email: userData.email,
             firstName: userData.firstName,
@@ -178,20 +178,20 @@ export const saveSingleUserFailed = () => {
 }
 
 
-//for getting user info
+//for getting single user info
 export const getUserInfoInit = (id) => {
     return dispatch => {
         dispatch(getUserInfo())
-        console.log(id)
+        // console.log(id)
         const queryParams = '?orderBy="userId"&equalTo="' + id + '"'
-        console.log(queryParams)
+        // console.log(queryParams)
         axios.get("https://react-burger-builder-5a549.firebaseio.com/users.json" + queryParams)
             .then(res => {
                 console.log(res.data)
                 let key = Object.keys(res.data)[0]
-                console.log(key)
+                // console.log(key)
                 const usrData = { ...res.data[key], dataBaseId: key }
-                console.log("getUserInfoStart -> usrData", usrData)
+                // console.log("getUserInfoStart -> usrData", usrData)
 
                 dispatch(setUserInfo(usrData))
             }).catch(err => {
@@ -253,4 +253,26 @@ export const updateUserFailed = (err) => {
 //for resetting the redirect on update user page
 export const resetRedirect = () => {
     return{type: actionTypes.RESET_AUTH_REDIRECT}
+}
+
+//---------------------------------RESETTING USERS PASSWORD------------------------
+export const resetUserPassword = (token) => {
+return dispatch => {
+
+    const userResetInfo = {
+        idToken: token,
+        password: "testing",
+        returnSecureToken: true
+
+    }
+
+    axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${process.env.REACT_APP_FIREBASE_KEY}`, userResetInfo)
+    .then(res => {
+        console.log(res)
+    })
+    .catch(err => {
+        console.log(err)
+        console.log(err.response)
+    })
+}
 }

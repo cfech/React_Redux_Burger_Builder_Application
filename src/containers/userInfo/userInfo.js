@@ -44,7 +44,7 @@ class UserInfo extends Component {
                             })
                         }} >Edit User Info</p> */}
                         <p className={classes.EditP} onClick={advanceUpdate} >Edit User Info</p>
-                        <p className={classes.EditP} >Change Password</p>
+                        <p className={classes.EditP} onClick={() => {this.props.resetPassword(this.props.token)}} >Change Password</p>
                     </div>
 
                     <div className={classes.UserData}>
@@ -74,7 +74,8 @@ const mapStateToProps = state => {
         userId: state.auth.userId,
         loggedInUser: state.auth.loggedInUser,
         loading: state.auth.loading,
-        error: state.auth.singleAccountError
+        error: state.auth.singleAccountError,
+        token: state.auth.token
     };
 };
 
@@ -88,6 +89,9 @@ const mapDispatchToProps = dispatch => {
         }, 
         resetAuthRedirect: () => {
             return dispatch(actionCreators.resetRedirect())
+        },
+        resetPassword: (token) =>{
+            return dispatch(actionCreators.resetUserPassword(token))
         }
     };
 };

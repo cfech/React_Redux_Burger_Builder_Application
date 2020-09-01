@@ -46,5 +46,8 @@ export {
     updateUserInfo, 
 
     //for resetting redirect
-    resetRedirect 
+    resetRedirect,
+
+    //for resetting password 
+    resetUserPassword
 } from "./auth"
