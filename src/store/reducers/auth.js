@@ -6,6 +6,7 @@ import { updateObject } from "../../general/utility"
 
 
 
+
 const initialState = {
     token: null,
     userId: null,
@@ -14,7 +15,10 @@ const initialState = {
     authRedirectPath: "/",
     loggedInUser: null,
     singleAccountError: null,
-    redirect: false
+    redirect: false, 
+    resetPasswordLoading: false, 
+    passwordHasBeenReset: false, 
+    resetPasswordError: null
 }
 //-----------------------USER AUTH---------------------------------------------------
 
@@ -86,6 +90,22 @@ const resetAuthRedirect = (state, action) => {
     return{...state, redirect: false}
 }
 
+//------------------------------RESETTING USER PASSWORD --------------------------------------
+const startResetPassword = (state, action) => {
+    return updateObject(state, {resetPasswordLoading: true})
+}
+
+const resetPasswordSuccess = (state, action) => {
+    return updateObject(state, {resetPasswordLoading: false, passwordHasBeenReset: true, token: action.newIdToken})
+}
+
+const resetPasswordFailed = (state, action) => {
+    return updateObject(state, {resetPasswordLoading: false, resetPasswordError: action.error})
+}
+
+const setPassWordHasBeenResetToFalse = (state, action) =>{
+    return updateObject(state, {passwordHasBeenReset: false})
+}
 
 //leaned out reducer
 const reducer = (state = initialState, action) => {
@@ -114,6 +134,14 @@ const reducer = (state = initialState, action) => {
             return updateUserFailed(state, action)
         case actionTypes.RESET_AUTH_REDIRECT:
             return resetAuthRedirect(state, action)
+        case actionTypes.START_PASSWORD_UPDATE:
+            return startResetPassword(state, action)
+        case actionTypes.UPDATE_PASSWORD_SUCCESS:
+            return resetPasswordSuccess(state, action)
+        case actionTypes.UPDATE_PASSWORD_FAILED:
+            return resetPasswordFailed(state, action)
+        case actionTypes.SET_PASSWORD_HAS_BEEN_RESET_TO_FALSE:
+            return setPassWordHasBeenResetToFalse(state, action) 
         default:
             return state
     }

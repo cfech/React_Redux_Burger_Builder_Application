@@ -35,7 +35,7 @@ export {
 
     //for conditional redirect
     setAuthRedirectPath,
-    
+
     //to see if any users are store in local storage
     authCheckState,
 
@@ -43,11 +43,12 @@ export {
     getUserInfoInit,
 
     //for updating user info
-    updateUserInfo, 
+    updateUserInfo,
 
     //for resetting redirect
     resetRedirect,
 
     //for resetting password 
-    resetUserPassword
+    resetUserPassword,
+    setPassWordHasBeenResetToFalse
 } from "./auth"

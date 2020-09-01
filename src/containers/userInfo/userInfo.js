@@ -5,11 +5,28 @@ import * as actionCreators from "../../store/actions/index"
 import classes from './userInfo.css'
 import Spinner from "../../components/UI/Spinner/spinner"
 
+import ChangePasswordModal from "../../components/changePasswordModal/changePasswordModal"
+
 
 class UserInfo extends Component {
+    state = {
+        showPasswordModal: false
+    }
+
     componentDidMount() {
         this.props.setLoggedInUser(this.props.userId)
         this.props.resetAuthRedirect()
+    }
+    openUpdatePassword = () => {
+        this.setState({
+            showPasswordModal: true
+        })
+    }
+
+    closeUpdatePassword = () => {
+        this.setState({
+            showPasswordModal: false
+        })
     }
 
     render() {
@@ -45,6 +62,7 @@ class UserInfo extends Component {
                         }} >Edit User Info</p> */}
                         <p className={classes.EditP} onClick={advanceUpdate} >Edit User Info</p>
                         {/* <p className={classes.EditP} onClick={() => {this.props.resetPassword(this.props.token)}} >Change Password</p> */}
+                        <p className={classes.EditP} onClick={this.openUpdatePassword} >Change Password</p>
                     </div>
 
                     <div className={classes.UserData}>
@@ -60,8 +78,11 @@ class UserInfo extends Component {
             )
         }
 
+
+
         return (
             <div>
+                <ChangePasswordModal show={this.state.showPasswordModal} closeModal = {this.closeUpdatePassword} />
                 {person}
 
             </div>
@@ -84,13 +105,13 @@ const mapDispatchToProps = dispatch => {
         setLoggedInUser: (id) => {
             return dispatch(actionCreators.getUserInfoInit(id))
         },
-        updateUserInfo: (id,userData) => {
+        updateUserInfo: (id, userData) => {
             return dispatch(actionCreators.updateUserInfo(id, userData))
-        }, 
+        },
         resetAuthRedirect: () => {
             return dispatch(actionCreators.resetRedirect())
         },
-        resetPassword: (token) =>{
+        resetPassword: (token) => {
             return dispatch(actionCreators.resetUserPassword(token))
         }
     };

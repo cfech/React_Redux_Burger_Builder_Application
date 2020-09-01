@@ -238,41 +238,62 @@ export const updateUserInfo = (userDataInfoId, userData) => {
 }
 
 export const updateUserStart = () => {
-    return{type: actionTypes.START_USER_UPDATE}
+    return { type: actionTypes.START_USER_UPDATE }
 }
 
 export const updateUserSuccess = (res) => {
-    return{type: actionTypes.USER_UPDATE_SUCCESS}
+    return { type: actionTypes.USER_UPDATE_SUCCESS }
 }
 
 export const updateUserFailed = (err) => {
-    return{type: actionTypes.USER_UPDATE_FAILED, error: err}
+    return { type: actionTypes.USER_UPDATE_FAILED, error: err }
 }
 
 
 //for resetting the redirect on update user page
 export const resetRedirect = () => {
-    return{type: actionTypes.RESET_AUTH_REDIRECT}
+    return { type: actionTypes.RESET_AUTH_REDIRECT }
 }
 
 //---------------------------------RESETTING USERS PASSWORD------------------------
-export const resetUserPassword = (token) => {
-return dispatch => {
+export const resetUserPassword = (token, password) => {
+    return dispatch => {
+        dispatch(startPasswordReset())
+        const userResetInfo = {
+            idToken: token,
+            password: password,
+            returnSecureToken: true
 
-    const userResetInfo = {
-        idToken: token,
-        password: "testing",
-        returnSecureToken: true
-
+        }
+        console.log(userResetInfo)
+        axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${process.env.REACT_APP_FIREBASE_KEY}`, userResetInfo)
+        .then(res => {
+            console.log(res)
+            console.log(res.response)
+            const newIdToken = res.data.idToken
+            dispatch(passwordResetSuccess(newIdToken))
+        })
+        .catch(err => {
+            console.log(err)
+            console.log(err.response)
+            dispatch(passwordResetFailed(err))
+        })
     }
-
-    axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${process.env.REACT_APP_FIREBASE_KEY}`, userResetInfo)
-    .then(res => {
-        console.log(res)
-    })
-    .catch(err => {
-        console.log(err)
-        console.log(err.response)
-    })
 }
+
+export const startPasswordReset = () => {
+    return{type: actionTypes.START_PASSWORD_UPDATE}
+}
+
+export const passwordResetSuccess = (newIdToken) => {
+    return{type: actionTypes.UPDATE_PASSWORD_SUCCESS, newIdToken:newIdToken}
+}
+
+export const passwordResetFailed = (err) => {
+    return{type: actionTypes.UPDATE_PASSWORD_FAILED, error: err}
+}
+
+
+export const setPassWordHasBeenResetToFalse = () =>{
+    return{type: actionTypes.SET_PASSWORD_HAS_BEEN_RESET_TO_FALSE}
 }
