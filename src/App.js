@@ -5,7 +5,7 @@ import { Route, Switch, withRouter } from "react-router-dom"
 import Auth from "./containers/auth/auth"
 import Logout from "./containers/auth/logout/logout"
 import Spinner from "./components/UI/Spinner/spinner"
-
+import UpdateUser from "./containers/updateUserInfo/updateUserInfo"
 
 
 //for redux
@@ -49,9 +49,10 @@ class App extends Component {
             fallback={<Spinner />}
           > <Orders /> </Suspense>} />
           <Route path="/logout" component={Logout} />
-          <Route path="/userInfo" render={() => <Suspense
+          <Route path="/myAccount" render={() => <Suspense
             fallback={<Spinner />}
           > <UserInfo /> </Suspense>} />
+          <Route path="/updateUser" component={UpdateUser} />
           <Route exact path="/" component={BurgerBuilder} />
           <Route component={BurgerBuilder} />
         </Switch>

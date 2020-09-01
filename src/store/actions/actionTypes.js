@@ -51,3 +51,10 @@ export const SET_AUTH_REDIRECT_PATH = "SET_AUTH_REDIRECT_PATH "
 
 //purchased state false
 export const SET_PURCHASED_TO_FALSE ="SET_PURCHASED_TO_FALSE"
+
+
+//updating users info
+export const START_USER_UPDATE = "START_USER_UPDATE"
+export const USER_UPDATE_SUCCESS = "USER_UPDATE_SUCCESS"
+export const USER_UPDATE_FAILED = "USER_UPDATE_FAILED"
+export const RESET_AUTH_REDIRECT = "RESET_AUTH_REDIRECT"

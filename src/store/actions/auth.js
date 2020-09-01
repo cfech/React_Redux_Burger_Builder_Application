@@ -215,3 +215,42 @@ export const setUserInfo = (userInfo) => {
 export const getUserInfoFailed = (err) => {
     return { type: actionTypes.GET_USER_INFO_FAILED, error: err }
 }
+
+//-----------------------------------UPDATE USER --------------------------------------------------
+//for updating a users information, asysnc function
+export const updateUserInfo = (userDataInfoId, userData) => {
+    return dispatch => {
+        console.log(userDataInfoId)
+        // const queryParams = '?equalTo="' + userDataInfoId + '"'
+        // console.log(queryParams)
+        console.log(userData)
+        dispatch(updateUserStart())
+        axios.patch(`https://react-burger-builder-5a549.firebaseio.com/users/${userDataInfoId}.json`, userData)
+            .then(res => {
+                console.log(res)
+                dispatch(updateUserSuccess())
+            })
+            .catch(err => {
+                console.log(err)
+                dispatch(updateUserFailed(err))
+            })
+    }
+}
+
+export const updateUserStart = () => {
+    return{type: actionTypes.START_USER_UPDATE}
+}
+
+export const updateUserSuccess = (res) => {
+    return{type: actionTypes.USER_UPDATE_SUCCESS}
+}
+
+export const updateUserFailed = (err) => {
+    return{type: actionTypes.USER_UPDATE_FAILED, error: err}
+}
+
+
+//for resetting the redirect on update user page
+export const resetRedirect = () => {
+    return{type: actionTypes.RESET_AUTH_REDIRECT}
+}

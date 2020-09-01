@@ -40,5 +40,11 @@ export {
     authCheckState,
 
     //for retrieving user info from database
-    getUserInfoInit
+    getUserInfoInit,
+
+    //for updating user info
+    updateUserInfo, 
+
+    //for resetting redirect
+    resetRedirect 
 } from "./auth"

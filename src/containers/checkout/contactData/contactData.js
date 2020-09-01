@@ -130,7 +130,7 @@ class ContactData extends Component {
     }
 
     componentDidMount() {
-        this.props.loadUser(this.props.userId)
+        this.props.setLoggedInUser(this.props.userId)
     }
 
     orderHandler = (e) => {
@@ -498,7 +498,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         initiateOrder: (order, token) => dispatch(actionCreators.initiateOrder(order, token)),
-        loadUser: (id) => dispatch(actionCreators.getUserInfoInit(id))
+        setLoggedInUser: (id) => dispatch(actionCreators.getUserInfoInit(id))
     }
 }
 

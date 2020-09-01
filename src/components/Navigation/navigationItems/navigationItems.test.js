@@ -68,7 +68,7 @@ describe("<NavigationItems/>", () => {
         wrapper.setProps({ isLoggedIn: true })
 
 
-        expect(wrapper.contains(<NavItem link='/userInfo'> My Account</NavItem> )).toEqual(true)
+        expect(wrapper.contains(<NavItem link='/myAccount'> My Account</NavItem> )).toEqual(true)
     })
 
     it("if logged in we should have a navigation item with a link to /orders", () => {

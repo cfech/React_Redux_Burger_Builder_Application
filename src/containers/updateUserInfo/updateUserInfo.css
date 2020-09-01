@@ -1,0 +1,36 @@
+.FormElement{
+    display: flex;
+    width: 95%;
+    box-sizing: border-box;
+    padding: 20px;
+    border: 2px solid #eeee;
+    box-shadow: 0 5px 5px #cccc;
+    margin: 10px;
+    justify-content: center;
+}
+
+.formContainer{
+    width: 85%;
+    box-sizing: border-box;
+    padding: 20px;
+    border: 2px solid #eeee;
+    box-shadow: 0 5px 5px #cccc;
+    margin: 20px auto;
+}
+
+.FormElement p{
+    margin-right: 10px;
+    position: relative;
+    top: 7px;
+}
+
+.Back{
+    color: blue;
+    text-decoration: underline;
+}
+
+.Back:hover{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
