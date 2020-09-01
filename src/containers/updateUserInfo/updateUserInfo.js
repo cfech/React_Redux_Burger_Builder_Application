@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import {Redirect} from "react-router-dom"
+import { Redirect } from "react-router-dom"
 import Input from "../../components/UI/inputEl/inputEl"
 
 import classes from './updateUserInfo.css'
@@ -320,10 +320,18 @@ class UpdateUser extends Component {
                         valid: true
                     },
                 },
-                loading:false
+                loading: false
             })
         }
         else { console.log("else") }
+    }
+
+    goBack = () => {
+        this.props.history.goBack()
+    }
+
+    resetForm = () => {
+        this.insertUserInfo()
     }
 
     render() {
@@ -364,19 +372,26 @@ class UpdateUser extends Component {
         // console.log(form)
 
         let redirect = null
-        if(this.props.redirect){
-            redirect = <Redirect to= "/myAccount"/>
+        if (this.props.redirect) {
+            redirect = <Redirect to="/myAccount" />
         }
 
         return (
             <div className={classes.formContainer}>
                 {redirect}
+
+                <div className={classes.ToolBar} >
+                    <p className={classes.Back} onClick={this.goBack} ><i className="fas fa-angle-double-left"></i></p>
+                    <p className={classes.Reset} onClick={this.resetForm} >Reset</p>
+                </div>
+
                 <h3 style={{ textAlign: "center" }}>Please Update Your Information</h3>
+
                 <form style={{ textAlign: "center" }} onSubmit={this.initDataUpdate}>
                     {form}
                     <Button btnType="Success" >Submit</Button>
                 </form>
-                <p className={classes.Back} >back</p>
+
             </div>
         )
     }
